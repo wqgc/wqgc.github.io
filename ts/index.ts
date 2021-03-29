@@ -4,7 +4,7 @@ const Typewriter = require('typewriter-effect/dist/core')
 window.addEventListener('DOMContentLoaded', () => {
     const cycleElement = document.getElementById('cycle')
     const text = ['Interactive Experiences', 'Functional Websites', 'Your Next Dream Project']
-    const pauseBetween = 1000
+    const pauseBetween = 1500
 
     const typewriter = new Typewriter(cycleElement, {
         loop: true,
