@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild ts/index.ts --bundle --sourcemap --minify --outfile=script.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,13 @@
   "bugs": {
     "url": "https://github.com/wqgc/portfolio/issues"
   },
-  "homepage": "https://github.com/wqgc/portfolio#readme"
+  "homepage": "https://github.com/wqgc/portfolio#readme",
+  "dependencies": {
+    "esbuild": "^0.10.2",
+    "typewriter-effect": "^2.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.37",
+    "typescript": "^4.2.3"
+  }
 }
