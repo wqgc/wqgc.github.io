@@ -41,16 +41,17 @@ nav {
 }
 
 nav ul {
-    max-width: 720px;
+    max-width: 900px;
     margin: 16px auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     height: 100%;
 }
 
 nav li a {
     color: rgb(203, 211, 255);
     text-decoration: none;
+    padding: 24px;
 }
 
 nav li a:hover {
@@ -100,6 +101,11 @@ hr {
     margin-left: 0;
     max-width: 100px;
     border: 1px solid rgb(116, 123, 167);
+}
+
+.divider {
+    max-width: 100%;
+    border: 1px solid rgb(168, 176, 221);
 }
 
 .box {
@@ -176,6 +182,10 @@ hr {
 }
 
 @media (max-width: 420px) {
+    nav ul {
+        justify-content: space-around;
+    }
+
     h1 {
         font-size: 2em;
     }
