@@ -14,6 +14,10 @@ html, body {
     flex-direction: column;
 }
 
+p {
+    line-height: 150%;
+}
+
 a {
     color: #0056a7;
 }
@@ -111,7 +115,7 @@ hr {
 .box {
     background-color: white;
     border-radius: 4px;
-    padding: 4px 12px;
+    padding: 4px 18px;
     margin: 16px 8px;
     box-shadow: 0 4px 4px rgb(116, 123, 167);
 }
@@ -145,7 +149,7 @@ hr {
 
 #skills img {
     max-height: 80px;
-    padding: 8px 20px;
+    padding: 8px 18px;
     transition: all .2s ease-in-out;
 }
 
@@ -155,13 +159,17 @@ hr {
 
 .project {
     display: flex;
-    flex-shrink: 1;
 }
 
 .project img {
     width: 400px;
     align-self: center;
     margin-top: 16px;
+}
+
+.project--column {
+    flex-direction: column;
+    align-items: center;
 }
 
 @media (max-width: 760px) {
@@ -172,12 +180,12 @@ hr {
     .project {
         flex-direction: column;
         align-items: center;
-        margin: 0 0 30px 0;
     }
 
     .project img {
         width: 100%;
         max-width: 600px;
+        margin: 0 0 30px 0;
     }
 }
 
@@ -197,4 +205,19 @@ hr {
     .subtitle {
         font-size: 1em;
     }
+}
+
+canvas {
+    position: relative;
+    background-color: #184981;
+    color: white;
+    height: 256px;
+    width: 100%;
+    margin: 8px 0 24px 0;
+    border-radius: 4px;
+}
+
+#skills-anchor, #projects-anchor, #contact-anchor {
+    position: relative;
+    top: -72px;
 }

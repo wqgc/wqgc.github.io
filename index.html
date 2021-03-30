@@ -14,9 +14,9 @@
         <div class='nav-spacer'></div>
         <nav>
             <ul>
-                <li><a href='#skills'>Skills</a></li>
-                <li><a href='#projects'>Projects</a></li>
-                <li><a href='#contact'>Contact</a></li>
+                <li><a id='skills-link' href='#skills-anchor'>Skills</a></li>
+                <li><a id='projects-link' href='#projects-anchor'>Projects</a></li>
+                <li><a id='contact-link' href='#contact-anchor'>Contact</a></li>
             </ul>
         </nav>
         <header>
@@ -25,6 +25,7 @@
             <span class='subtitle'>Creating <span id='cycle'>Interactive Experiences</span></span>
         </header>
         <main>
+            <div id='skills-anchor'></div>
             <section id='skills'>
                 <h2>Skills</h2>
                 <hr>
@@ -55,6 +56,7 @@
                     </span>
                 </ul>
             </section>
+            <div id='projects-anchor'></div>
             <section id='projects'>
                 <h2>Projects</h2>
                 <hr>
@@ -62,10 +64,10 @@
                     <div class='box'>
                         <p>
                             <a href='https://wqgc.github.io/organize-app/' target='_blank'><strong>Organize</strong></a> is perfect for keeping track of notes, lists, and links with an easy to use interface. 
-                            Create pages, sections, and items that you can edit and reorder freely. No sign-ups; data is stored in your browser and can be imported and exported.
+                            Create pages, sections, and items that you can edit and reorder freely. No sign-ups; data is stored in your browser and can be imported or exported at any time.
                         </p>
                         <p>
-                            This Node application, a solo-project made by Rashelle, is built with semantic HTML, responsive CSS, 
+                            This Node web app, a solo-project I made, is built with semantic HTML, responsive CSS, 
                             and programmed in JavaScript using TypeScript and the React library.
                         </p>
                         <p>
@@ -77,14 +79,19 @@
                     <img src='/images/orgwide.png' title='Web App Showcase' alt='Image of website on computer'/>
                 </div>
                 <hr class='divider'>
-                <div class='project'>
+                <div class='project project--column'>
                     <div class='box'>
                         <p>
+                            <strong>Some Name Here.</strong>
                             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
                         </p>
                     </div>
+                    <canvas id='game'>
+                        There's supposed to be a game here, but you have JavaScript disabled or your browser doesn't support Canvas.
+                    </canvas>
                 </div>
             </section>
+            <div id='contact-anchor'></div>
             <section id='contact'>
                 <h2>Contact</h2>
                 <hr>
