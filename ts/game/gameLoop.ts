@@ -37,63 +37,84 @@ spritesheet.src = 'images/gamespritesheet.png'
 
 // Get input
 document.addEventListener('keydown', event => {
-    if (event.key === 'ArrowLeft') {
-        game = {...game, input: { left: true, right: game.input.right }}
-    }
-    if (event.key === 'ArrowRight') {
-        game = {...game, input: { left: game.input.left, right: true }}
+    switch(game.state) {
+        case GameState.Playing:
+            if (event.key === 'ArrowLeft') {
+                game = {...game, input: { left: true, right: game.input.right }}
+            }
+            if (event.key === 'ArrowRight') {
+                game = {...game, input: { left: game.input.left, right: true }}
+            }
+            break
     }
 })
 
 document.addEventListener('keyup', event => {
-    if (event.key === 'ArrowLeft') {
-        game = {...game, input: { left: false, right: game.input.right }}
-    }
-    if (event.key === 'ArrowRight') {
-        game = {...game, input: { left: game.input.left, right: false }}
+    switch(game.state) {
+        case GameState.Playing:
+            if (event.key === 'ArrowLeft') {
+                game = {...game, input: { left: false, right: game.input.right }}
+            }
+            if (event.key === 'ArrowRight') {
+                game = {...game, input: { left: game.input.left, right: false }}
+            }
+            break
     }
 })
 
 const updateStatus = (ctx: CanvasRenderingContext2D): void => {
-    // Gradually increase the fall speed of entities
-    let spawnWait = game.spawnWait
-    let fallSpeedMultiplier = game.fallSpeedMultiplier
     if (game.state === GameState.Playing) {
-        if (spawnWait > 60) {
-            spawnWait -= .1
+        // Pause the game if we unfocus it
+        if (document.activeElement !== ctx.canvas) {
+            game = {...game, state: GameState.Paused}
         }
-        if (fallSpeedMultiplier < 3) {
-            fallSpeedMultiplier += .001
-        }
-    }
 
-    // Handle player states
-    switch(player.state) {
-        case PlayerState.Idle:
-            player = PlayerScripts.idle(game, player)
-            break
-        case PlayerState.Running:
-            player = PlayerScripts.running(game, player)
-            break
-    }
-
-    // Make entities fall/clear them when out of canvas
-    const entityArr: Entity[] = []
-    game.entities.forEach(entity => {
-        if (entity.ypos >= ctx.canvas.height - game.spriteSize) {
-            return
+        // Gradually increase the fall speed of entities
+        let spawnWait = game.spawnWait
+        let fallSpeedMultiplier = game.fallSpeedMultiplier
+        if (game.state === GameState.Playing) {
+            if (spawnWait > 60) {
+                spawnWait -= .1
+            }
+            if (fallSpeedMultiplier < 3) {
+                fallSpeedMultiplier += .001
+            }
         }
-        entityArr.push({
-            ...entity,
-            ypos: entity.ypos + (entity.speed * game.fallSpeedMultiplier)
+
+        // Handle player states
+        switch(player.state) {
+            case PlayerState.Idle:
+                player = PlayerScripts.idle(game, player)
+                break
+            case PlayerState.Running:
+                player = PlayerScripts.running(game, player)
+                break
+        }
+
+        // Make entities fall/clear them when out of canvas
+        const entityArr: Entity[] = []
+        game.entities.forEach(entity => {
+            if (entity.ypos >= ctx.canvas.height - game.spriteSize) {
+                return
+            }
+            entityArr.push({
+                ...entity,
+                ypos: entity.ypos + (entity.speed * game.fallSpeedMultiplier)
+            })
         })
-    })
 
-    game = {
-        ...game, 
-        entities: entityArr, 
-        spawnWait,
-        fallSpeedMultiplier
+        game = {
+            ...game, 
+            entities: entityArr, 
+            spawnWait,
+            fallSpeedMultiplier,
+            spawnTickCount: game.spawnTickCount + 1
+        }
+    } else if (GameState.StartScreen || GameState.Paused) {
+        // Start/resume game on focus
+        if (document.activeElement === ctx.canvas) {
+            game = {...game, state: GameState.Playing}
+        }
     }
 }
 
@@ -105,17 +126,6 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
         ctx.canvas.width * 2, 
         ctx.canvas.height * 2
     )
-
-    switch(game.state) {
-        case GameState.StartScreen:
-            return
-        case GameState.Playing:
-            break
-        case GameState.Paused:
-            break
-        case GameState.GameOver:
-            return
-    }
 
     const drawEntity = (entity: PlayerStatus | Entity, imageIndex: number) => {
         const defaults = {
@@ -173,7 +183,12 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
             }
         })
 
-        game = {...game, entities: entityArr, tickSkip: !game.tickSkip, tickCount: 0}
+        game = {
+            ...game, 
+            entities: entityArr, 
+            tickSkip: !game.tickSkip, 
+            tickCount: 0
+        }
     }
 
     // Draw stuff
@@ -203,20 +218,44 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
             }
             break
     }
+
+    switch(game.state) {
+        case GameState.StartScreen:
+            return
+        case GameState.Paused:
+            ctx.globalAlpha = 0.5
+            ctx.fillStyle = 'black'
+            ctx.rect(
+                -ctx.canvas.width, 
+                -ctx.canvas.height, 
+                ctx.canvas.width * 2, 
+                ctx.canvas.height * 2
+            )
+            ctx.fill()
+            ctx.globalAlpha = 1
+            ctx.fillStyle = 'white'
+            ctx.font = '48px VT323'
+            ctx.fillText('Paused', -54, 0)
+            break
+        case GameState.GameOver:
+            return
+    }
 }
 
 const handleSpawning = (ctx: CanvasRenderingContext2D): void => {
-    if (game.spawnTickCount >= game.spawnWait) {
-        const entities = [...game.entities]
-        entities.push({
-            type: EntityType.Star,
-            xpos: 0,
-            ypos: (0 - (ctx.canvas.height * .5)) - game.spriteSize,
-            frameIndex: 0,
-            speed: 1
-        })
-
-        game = {...game, entities, spawnTickCount: 0}
+    if (game.state === GameState.Playing) {
+        if (game.spawnTickCount >= game.spawnWait) {
+            const entities = [...game.entities]
+            entities.push({
+                type: EntityType.Star,
+                xpos: 0,
+                ypos: (0 - (ctx.canvas.height * .5)) - game.spriteSize,
+                frameIndex: 0,
+                speed: 1
+            })
+    
+            game = {...game, entities, spawnTickCount: 0}
+        }
     }
 }
 
@@ -225,11 +264,8 @@ const gameLoop = (ctx: CanvasRenderingContext2D): void => {
     updateStatus(ctx)
     draw(ctx)
 
-    game = {
-        ...game, 
-        tickCount: game.tickCount + 1, 
-        spawnTickCount: game.spawnTickCount + 1
-    }
+    // Triggers animation, even when paused (I think it looks neat)
+    game = {...game, tickCount: game.tickCount + 1}
 
     window.requestAnimationFrame(() => gameLoop(ctx))
 }
