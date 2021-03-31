@@ -7,13 +7,18 @@ interface GameStatus {
         xpos: number,
         ypos: number
     }[]
-    score: number
+    score: number,
+    input: {
+        left: boolean,
+        right: boolean
+    }
 }
 
 interface PlayerStatus {
     state: PlayerState
     xpos: number
     ypos: number
+    speed: number
 }
 
 export type { GameStatus, PlayerStatus }
