@@ -11,9 +11,15 @@ enum PlayerState {
     Running
 }
 
-enum Entity {
+enum EntityType {
     Bug,
     Star
 }
 
-export { GameState, PlayerState, Entity }
+enum ImageIndex {
+    PlayerIdle = 0,
+    PlayerRunLeft = 1,
+    PlayerRunRight = 2
+}
+
+export { GameState, PlayerState, EntityType, ImageIndex }

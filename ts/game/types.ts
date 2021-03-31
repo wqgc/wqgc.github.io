@@ -1,17 +1,25 @@
-import { GameState, PlayerState, Entity } from './enums'
+import { GameState, PlayerState, EntityType } from './enums'
+
+interface Entity {
+    type: EntityType
+    xpos: number
+    ypos: number
+    frameIndex: number
+}
 
 interface GameStatus {
     state: GameState
-    entities: {
-        type: Entity,
-        xpos: number,
-        ypos: number
-    }[]
+    entities: Entity[]
     score: number,
     input: {
         left: boolean,
         right: boolean
-    }
+    },
+    tickRate: number,
+    tickSkip: boolean,
+    tickCount: number,
+    spriteSize: number,
+    spriteFrameCount: number
 }
 
 interface PlayerStatus {
@@ -19,6 +27,7 @@ interface PlayerStatus {
     xpos: number
     ypos: number
     speed: number
+    frameIndex: number
 }
 
-export type { GameStatus, PlayerStatus }
+export type { GameStatus, PlayerStatus, Entity }

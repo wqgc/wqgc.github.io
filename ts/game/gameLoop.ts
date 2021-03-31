@@ -1,5 +1,6 @@
-import { GameStatus, PlayerStatus } from './types'
-import { GameState, PlayerState } from './enums'
+import { GameStatus, PlayerStatus, Entity } from './types'
+import { GameState, PlayerState, ImageIndex } from './enums'
+import * as PlayerScripts from './states/PlayerScripts'
 
 // Initialize data
 const initialGameStatus: GameStatus = {
@@ -9,18 +10,27 @@ const initialGameStatus: GameStatus = {
     input: {
         left: false,
         right: false
-    }
+    },
+    tickRate: 6,
+    tickSkip: false, // Used for slower animations
+    tickCount: 0,
+    spriteSize: 64,
+    spriteFrameCount: 3
 }
 
 const initialPlayerStatus: PlayerStatus = {
     state: PlayerState.Idle,
     xpos: 0,
-    ypos: 40,
-    speed: 4
+    ypos: 64,
+    speed: 4,
+    frameIndex: 0
 }
 
 let game = initialGameStatus
 let player = initialPlayerStatus
+
+const spritesheet = new Image()
+spritesheet.src = 'images/gamespritesheet.png'
 
 // Get input
 document.addEventListener('keydown', event => {
@@ -41,13 +51,14 @@ document.addEventListener('keyup', event => {
     }
 })
 
-const updatePositions = (): void => {
-    if (!(game.input.left && game.input.right)) {
-        if (game.input.left) {
-            player = {...player, xpos: player.xpos - player.speed}
-        } else if (game.input.right) {
-            player = {...player, xpos: player.xpos + player.speed}
-        }
+const updateStatus = (): void => {
+    switch(player.state) {
+        case PlayerState.Idle:
+            player = PlayerScripts.idle(game, player)
+            break
+        case PlayerState.Running:
+            player = PlayerScripts.running(game, player)
+            break
     }
 }
 
@@ -71,19 +82,76 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
             return
     }
 
+    const drawEntity = (entity: PlayerStatus | Entity, imageIndex: number) => {
+        const defaults = {
+            image: spritesheet as HTMLImageElement,
+            sWidth: game.spriteSize,
+            sHeight: game.spriteSize,
+            dx: entity.xpos - (game.spriteSize * .5),
+            dy: entity.ypos - (game.spriteSize * .5),
+            dWidth: game.spriteSize,
+            dHeight: game.spriteSize
+        }
+
+        let sx = entity.frameIndex * game.spriteSize
+        let sy = imageIndex * game.spriteSize
+
+        ctx.drawImage(
+            defaults.image,
+            sx,
+            sy,
+            defaults.sWidth,
+            defaults.sHeight,
+            defaults.dx,
+            defaults.dy,
+            defaults.dWidth,
+            defaults.dHeight
+        )
+    }
+
+    // Update current frame
+    if (game.tickCount === game.tickRate) {
+        if (!(player.state === PlayerState.Idle && game.tickSkip)) {
+            player = {
+                ...player, 
+                frameIndex: (
+                    player.frameIndex === game.spriteFrameCount - 1 ? 0
+                    : player.frameIndex + 1
+                )
+            }
+        }
+        
+        // TO DO: iterate through entities and update them
+
+        game = {...game, tickSkip: !game.tickSkip, tickCount: 0}
+    }
+
     switch(player.state) {
+        case PlayerState.Hidden:
+            return
         case PlayerState.Idle:
-            ctx.fillStyle = '#fff'
-            ctx.fillRect(player.xpos, player.ypos, 10, 10)
+            drawEntity(player, ImageIndex.PlayerIdle)
             break
         case PlayerState.Running:
+            if (!(game.input.left && game.input.right)) {
+                if (game.input.left) {
+                    drawEntity(player, ImageIndex.PlayerRunLeft)
+                } else if (game.input.right) {
+                    drawEntity(player, ImageIndex.PlayerRunRight)
+                }
+            } else {
+                drawEntity(player, ImageIndex.PlayerIdle)
+            }
             break
     }
 }
 
 const gameLoop = (ctx: CanvasRenderingContext2D): void => {
-    updatePositions()
+    updateStatus()
     draw(ctx)
+
+    game = {...game, tickCount: game.tickCount + 1}
+
     window.requestAnimationFrame(() => gameLoop(ctx))
 }
 

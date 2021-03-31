@@ -9,7 +9,7 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
         const resizeCanvas = (): void => {
             let width = document.getElementById('projects')?.clientWidth
             if (width) {
-                ctx.canvas.height = 256
+                ctx.canvas.height = 320
                 ctx.canvas.width = width
                 ctx.translate(width * .5, ctx.canvas.height * .5)
             }
