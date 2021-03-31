@@ -5,6 +5,7 @@ interface Entity {
     xpos: number
     ypos: number
     frameIndex: number
+    speed: number
 }
 
 interface GameStatus {
@@ -19,7 +20,10 @@ interface GameStatus {
     tickSkip: boolean,
     tickCount: number,
     spriteSize: number,
-    spriteFrameCount: number
+    spriteFrameCount: number,
+    spawnWait: number,
+    spawnTickCount: number,
+    fallSpeedMultiplier: number
 }
 
 interface PlayerStatus {

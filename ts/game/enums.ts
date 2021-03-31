@@ -16,10 +16,12 @@ enum EntityType {
     Star
 }
 
+// Numbers are listed for quick reference
 enum ImageIndex {
     PlayerIdle = 0,
     PlayerRunLeft = 1,
-    PlayerRunRight = 2
+    PlayerRunRight = 2,
+    Star = 3
 }
 
 export { GameState, PlayerState, EntityType, ImageIndex }

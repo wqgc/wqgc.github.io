@@ -1,5 +1,5 @@
 import { GameStatus, PlayerStatus, Entity } from './types'
-import { GameState, PlayerState, ImageIndex } from './enums'
+import { GameState, PlayerState, ImageIndex, EntityType } from './enums'
 import * as PlayerScripts from './states/PlayerScripts'
 
 // Initialize data
@@ -15,7 +15,10 @@ const initialGameStatus: GameStatus = {
     tickSkip: false, // Used for slower animations
     tickCount: 0,
     spriteSize: 64,
-    spriteFrameCount: 3
+    spriteFrameCount: 3,
+    spawnWait: 200,
+    spawnTickCount: 0,
+    fallSpeedMultiplier: 1
 }
 
 const initialPlayerStatus: PlayerStatus = {
@@ -51,7 +54,20 @@ document.addEventListener('keyup', event => {
     }
 })
 
-const updateStatus = (): void => {
+const updateStatus = (ctx: CanvasRenderingContext2D): void => {
+    // Gradually increase the fall speed of entities
+    let spawnWait = game.spawnWait
+    let fallSpeedMultiplier = game.fallSpeedMultiplier
+    if (game.state === GameState.Playing) {
+        if (spawnWait > 60) {
+            spawnWait -= .1
+        }
+        if (fallSpeedMultiplier < 3) {
+            fallSpeedMultiplier += .001
+        }
+    }
+
+    // Handle player states
     switch(player.state) {
         case PlayerState.Idle:
             player = PlayerScripts.idle(game, player)
@@ -59,6 +75,25 @@ const updateStatus = (): void => {
         case PlayerState.Running:
             player = PlayerScripts.running(game, player)
             break
+    }
+
+    // Make entities fall/clear them when out of canvas
+    const entityArr: Entity[] = []
+    game.entities.forEach(entity => {
+        if (entity.ypos >= ctx.canvas.height - game.spriteSize) {
+            return
+        }
+        entityArr.push({
+            ...entity,
+            ypos: entity.ypos + (entity.speed * game.fallSpeedMultiplier)
+        })
+    })
+
+    game = {
+        ...game, 
+        entities: entityArr, 
+        spawnWait,
+        fallSpeedMultiplier
     }
 }
 
@@ -111,6 +146,7 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
 
     // Update current frame
     if (game.tickCount === game.tickRate) {
+        // Update player frames
         if (!(player.state === PlayerState.Idle && game.tickSkip)) {
             player = {
                 ...player, 
@@ -121,10 +157,33 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
             }
         }
         
-        // TO DO: iterate through entities and update them
+        // Update non-player entity frames
+        const entityArr: Entity[] = []
+        game.entities.forEach(entity => {
+            if (!game.tickSkip) {
+                entityArr.push({
+                    ...entity,
+                    frameIndex: (
+                        entity.frameIndex === game.spriteFrameCount - 1 ? 0
+                        : entity.frameIndex + 1
+                    )
+                })
+            } else {
+                entityArr.push(entity)
+            }
+        })
 
-        game = {...game, tickSkip: !game.tickSkip, tickCount: 0}
+        game = {...game, entities: entityArr, tickSkip: !game.tickSkip, tickCount: 0}
     }
+
+    // Draw stuff
+    game.entities.forEach(entity => {
+        switch(entity.type) {
+            case EntityType.Star:
+                drawEntity(entity, ImageIndex.Star)
+                break
+        }
+    })
 
     switch(player.state) {
         case PlayerState.Hidden:
@@ -146,11 +205,31 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
     }
 }
 
+const handleSpawning = (ctx: CanvasRenderingContext2D): void => {
+    if (game.spawnTickCount >= game.spawnWait) {
+        const entities = [...game.entities]
+        entities.push({
+            type: EntityType.Star,
+            xpos: 0,
+            ypos: (0 - (ctx.canvas.height * .5)) - game.spriteSize,
+            frameIndex: 0,
+            speed: 1
+        })
+
+        game = {...game, entities, spawnTickCount: 0}
+    }
+}
+
 const gameLoop = (ctx: CanvasRenderingContext2D): void => {
-    updateStatus()
+    handleSpawning(ctx)
+    updateStatus(ctx)
     draw(ctx)
 
-    game = {...game, tickCount: game.tickCount + 1}
+    game = {
+        ...game, 
+        tickCount: game.tickCount + 1, 
+        spawnTickCount: game.spawnTickCount + 1
+    }
 
     window.requestAnimationFrame(() => gameLoop(ctx))
 }
