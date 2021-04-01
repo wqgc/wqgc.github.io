@@ -24,7 +24,7 @@ const initialGameStatus: GameStatus = {
 const initialPlayerStatus: PlayerStatus = {
     state: PlayerState.Idle,
     xpos: 0,
-    ypos: 64,
+    ypos: 114,
     speed: 4,
     frameIndex: 0
 }
@@ -68,8 +68,8 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
     // Update canvas values
     topX = -ctx.canvas.width * .5
     topY = -ctx.canvas.height * .5
-    maxX = ctx.canvas.width * 2
-    maxY = ctx.canvas.width * 2
+    maxX = ctx.canvas.width
+    maxY = ctx.canvas.height
 
     if (game.state === GameState.Playing) {
         // Pause the game if we unfocus it
@@ -92,10 +92,10 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
         // Handle player states
         switch(player.state) {
             case PlayerState.Idle:
-                player = PlayerScripts.idle(game, player)
+                player = PlayerScripts.idle(game, player, topX, maxX)
                 break
             case PlayerState.Running:
-                player = PlayerScripts.running(game, player)
+                player = PlayerScripts.running(game, player, topX, maxX)
                 break
         }
 
@@ -247,7 +247,7 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
             ctx.fillStyle = 'white'
             ctx.font = '48px VT323'
             ctx.fillText('Paused', -54, 10)
-            break
+            return
         case GameState.GameOver:
             return
     }
@@ -296,8 +296,6 @@ const handleSpawning = (ctx: CanvasRenderingContext2D): void => {
                 entities: [...game.entities, ...newEntities], 
                 spawnTickCount: 0
             }
-
-            console.log(`Entity Count: ${game.entities.length}`)
         }
     }
 }
