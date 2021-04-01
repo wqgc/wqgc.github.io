@@ -209,16 +209,34 @@ hr {
 
 canvas {
     position: relative;
-    background-color: #215ca0;
+    background-color: #161922;
     color: white;
     height: 320px;
     width: 100%;
     margin: 8px 0 24px 0;
     border-radius: 4px;
     text-align: center;
+    cursor: pointer;
 }
 
 #skills-anchor, #projects-anchor, #contact-anchor {
     position: relative;
     top: -72px;
+}
+
+#game-text {
+    position: relative;
+    top: 140;
+    height: 0;
+    font-family: 'VT323', monospace;
+    font-size: 48px;
+    color: white;
+    display: inline;
+    pointer-events: none;
+    z-index: 1;
+    transition: all .2s ease-in-out;
+}
+
+.text-grow {
+    transform: scale(1.1);
 }
