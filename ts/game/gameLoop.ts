@@ -4,7 +4,7 @@ import * as PlayerScripts from './states/PlayerScripts'
 
 // Initialize data
 const initialGameStatus: GameStatus = {
-    state: GameState.Playing,
+    state: GameState.StartScreen,
     entities: [],
     score: 0,
     input: {
@@ -29,11 +29,13 @@ const initialPlayerStatus: PlayerStatus = {
     frameIndex: 0
 }
 
-let game = initialGameStatus
-let player = initialPlayerStatus
+let game: GameStatus = initialGameStatus
+let player: PlayerStatus = initialPlayerStatus
 
 const spritesheet = new Image()
 spritesheet.src = 'images/gamespritesheet.png'
+
+let topX: number, topY: number, maxX: number, maxY: number
 
 // Get input
 document.addEventListener('keydown', event => {
@@ -63,6 +65,12 @@ document.addEventListener('keyup', event => {
 })
 
 const updateStatus = (ctx: CanvasRenderingContext2D): void => {
+    // Update canvas values
+    topX = -ctx.canvas.width * .5
+    topY = -ctx.canvas.height * .5
+    maxX = ctx.canvas.width * 2
+    maxY = ctx.canvas.width * 2
+
     if (game.state === GameState.Playing) {
         // Pause the game if we unfocus it
         if (document.activeElement !== ctx.canvas) {
@@ -120,12 +128,7 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
 
 const draw = (ctx: CanvasRenderingContext2D): void => {
     // Clear the canvas
-    ctx.clearRect(
-        -ctx.canvas.width, 
-        -ctx.canvas.height, 
-        ctx.canvas.width * 2, 
-        ctx.canvas.height * 2
-    )
+    ctx.clearRect(topX, topY, maxX, maxY)
 
     const drawEntity = (entity: PlayerStatus | Entity, imageIndex: number) => {
         const defaults = {
@@ -197,6 +200,12 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
             case EntityType.Star:
                 drawEntity(entity, ImageIndex.Star)
                 break
+            case EntityType.Bug:
+                drawEntity(entity, ImageIndex.PlayerIdle) // TEMP!
+                break
+            case EntityType.Bug2:
+                drawEntity(entity, ImageIndex.PlayerRunLeft) // TEMP!
+                break
         }
     })
 
@@ -221,21 +230,23 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
 
     switch(game.state) {
         case GameState.StartScreen:
+            ctx.fillStyle = 'black'
+            ctx.rect(topX, topY, maxX, maxY)
+            ctx.fill()
+            ctx.fillStyle = 'white'
+            ctx.font = '48px VT323'
+            ctx.fillText('Start', -44, 0)
+            ctx.fillText('Game', -38, 34)
             return
         case GameState.Paused:
             ctx.globalAlpha = 0.5
             ctx.fillStyle = 'black'
-            ctx.rect(
-                -ctx.canvas.width, 
-                -ctx.canvas.height, 
-                ctx.canvas.width * 2, 
-                ctx.canvas.height * 2
-            )
+            ctx.rect(topX, topY, maxX, maxY)
             ctx.fill()
             ctx.globalAlpha = 1
             ctx.fillStyle = 'white'
             ctx.font = '48px VT323'
-            ctx.fillText('Paused', -54, 0)
+            ctx.fillText('Paused', -54, 10)
             break
         case GameState.GameOver:
             return
@@ -245,16 +256,48 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
 const handleSpawning = (ctx: CanvasRenderingContext2D): void => {
     if (game.state === GameState.Playing) {
         if (game.spawnTickCount >= game.spawnWait) {
-            const entities = [...game.entities]
-            entities.push({
-                type: EntityType.Star,
-                xpos: 0,
-                ypos: (0 - (ctx.canvas.height * .5)) - game.spriteSize,
-                frameIndex: 0,
-                speed: 1
-            })
-    
-            game = {...game, entities, spawnTickCount: 0}
+            const badEntityTypes = [EntityType.Bug, EntityType.Bug2]
+            const newEntities = []
+            let starsSpawned = 0
+            let maxStars = Math.floor(ctx.canvas.width / (game.spriteSize * 5))
+            if (maxStars < 1) maxStars = 1
+
+            // Spawn bad entities
+            for (let i = 0; i < Math.floor(ctx.canvas.width / game.spriteSize); i++) {
+                if (Math.random() > .5) {
+                    newEntities.push({
+                        type: badEntityTypes[Math.floor(Math.random() * badEntityTypes.length)],
+                        xpos: (topX + (i * (game.spriteSize * 1.2))) + (game.spriteSize * .5),
+                        ypos: (0 - (ctx.canvas.height * .5)) - game.spriteSize,
+                        frameIndex: 0,
+                        speed: 1 + (Math.random())
+                    })
+                }
+            }
+
+            // Replace some bad entities with stars
+            for (let i = 0; i < newEntities.length; i++) {
+                if (starsSpawned === maxStars) {
+                    break
+                }
+
+                if (Math.random() > .5) {
+                    newEntities[i] = {
+                        ...newEntities[i], 
+                        type: EntityType.Star, 
+                        speed: .5 + (Math.random())
+                    }
+                    starsSpawned++
+                }
+            }
+
+            game = {
+                ...game, 
+                entities: [...game.entities, ...newEntities], 
+                spawnTickCount: 0
+            }
+
+            console.log(`Entity Count: ${game.entities.length}`)
         }
     }
 }

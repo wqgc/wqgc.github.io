@@ -13,6 +13,7 @@ enum PlayerState {
 
 enum EntityType {
     Bug,
+    Bug2,
     Star
 }
 
