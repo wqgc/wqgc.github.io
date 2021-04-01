@@ -66,8 +66,8 @@ document.addEventListener('keyup', event => {
 
 const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void => {
     // Update canvas values
-    topX = -ctx.canvas.width * .5
-    topY = -ctx.canvas.height * .5
+    topX = Math.floor(-ctx.canvas.width * .5)
+    topY = Math.floor(-ctx.canvas.height * .5)
     maxX = ctx.canvas.width
     maxY = ctx.canvas.height
 
@@ -75,7 +75,7 @@ const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElemen
     if (player.xpos + 5 < topX) {
         player = {...player, xpos: topX + 1}
     } else if ((player.xpos * 2) - 5 > maxX) {
-        player = {...player, xpos: (maxX * .5) - 1}
+        player = {...player, xpos: Math.floor((maxX * .5) - 1)}
     }
 
     // Pause the game if we unfocus it
@@ -131,16 +131,15 @@ const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElemen
 const draw = (ctx: CanvasRenderingContext2D): void => {
     // Clear the canvas
     ctx.fillStyle = '#163b6e'
-    ctx.rect(topX, topY, maxX, maxY)
-    ctx.fill()
+    ctx.fillRect(topX, topY, maxX, maxY)
 
     const drawEntity = (entity: PlayerStatus | Entity, imageIndex: number) => {
         const defaults = {
             image: spritesheet as HTMLImageElement,
             sWidth: game.spriteSize,
             sHeight: game.spriteSize,
-            dx: entity.xpos - (game.spriteSize * .5),
-            dy: entity.ypos - (game.spriteSize * .5),
+            dx: Math.floor(entity.xpos - (game.spriteSize * .5)),
+            dy: Math.floor(entity.ypos - (game.spriteSize * .5)),
             dWidth: game.spriteSize,
             dHeight: game.spriteSize
         }
@@ -234,8 +233,7 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
 
     if (game.state === GameState.Paused) {
         ctx.fillStyle = '#161922'
-        ctx.rect(topX, topY, maxX, maxY)
-        ctx.fill()
+        ctx.fillRect(topX, topY, maxX, maxY)
     }
 }
 
@@ -249,11 +247,11 @@ const handleSpawning = (ctx: CanvasRenderingContext2D): void => {
             if (maxStars < 1) maxStars = 1
 
             // Spawn bad entities
-            for (let i = 0; i < Math.floor(ctx.canvas.width / game.spriteSize); i++) {
+            for (let i = 0; i < Math.floor(ctx.canvas.width / (game.spriteSize * 2)); i++) {
                 if (Math.random() > .5) {
                     newEntities.push({
                         type: badEntityTypes[Math.floor(Math.random() * badEntityTypes.length)],
-                        xpos: (topX + (i * (game.spriteSize * 1.2))) + (game.spriteSize * .5),
+                        xpos: (topX + (i * (game.spriteSize * 2))) + (game.spriteSize * .5),
                         ypos: (0 - (ctx.canvas.height * .5)) - game.spriteSize,
                         frameIndex: 0,
                         speed: 1 + (Math.random())
@@ -337,7 +335,7 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
             if (width) {
                 ctx.canvas.height = 320
                 ctx.canvas.width = width
-                ctx.translate(width * .5, ctx.canvas.height * .5)
+                ctx.translate(Math.floor(width * .5), Math.floor(ctx.canvas.height * .5))
             }
         }
 
