@@ -71,6 +71,13 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
     maxX = ctx.canvas.width
     maxY = ctx.canvas.height
 
+    // Reposition the player if they are out of bounds due to resizing
+    if (player.xpos + 5 < topX) {
+        player = {...player, xpos: topX + 1}
+    } else if ((player.xpos * 2) - 5 > maxX) {
+        player = {...player, xpos: (maxX * .5) - 1}
+    }
+
     if (game.state === GameState.Playing) {
         // Pause the game if we unfocus it
         if (document.activeElement !== ctx.canvas) {
@@ -92,7 +99,7 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
         // Handle player states
         switch(player.state) {
             case PlayerState.Idle:
-                player = PlayerScripts.idle(game, player, topX, maxX)
+                player = PlayerScripts.idle(game, player)
                 break
             case PlayerState.Running:
                 player = PlayerScripts.running(game, player, topX, maxX)
