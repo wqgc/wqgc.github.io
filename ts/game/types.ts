@@ -38,6 +38,7 @@ interface CanvasCalcs {
     maxStars: number | null
     entityXpos: number[]
     entityYpos: number | null
+    foregroundXpos: number[]
 }
 
 export type { GameStatus, PlayerStatus, Entity, CanvasCalcs }

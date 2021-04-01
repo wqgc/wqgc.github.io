@@ -12,8 +12,9 @@ enum PlayerState {
 }
 
 enum EntityType {
-    Bug,
-    Bug2,
+    Meteor,
+    Meteor2,
+    UFO,
     Star
 }
 
@@ -22,7 +23,10 @@ enum ImageIndex {
     PlayerIdle = 0,
     PlayerRunLeft = 1,
     PlayerRunRight = 2,
-    Star = 3
+    Star = 3,
+    Meteor = 4,
+    Meteor2 = 5,
+    UFO = 6
 }
 
 export { GameState, PlayerState, EntityType, ImageIndex }

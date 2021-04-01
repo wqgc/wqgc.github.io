@@ -34,14 +34,17 @@ let player: PlayerStatus = initialPlayerStatus
 
 const spritesheet = new Image()
 spritesheet.src = 'images/gamespritesheet.png'
+const foreground = new Image()
+foreground.src = 'images/gameforeground.png'
 
 let topX: number, topY: number, maxX: number, maxY: number
 
 // So we only have to do these calculations when resizing
 let canvasCalcs: CanvasCalcs = {
     maxStars: null,
-    entityXpos: [0],
-    entityYpos: null
+    entityXpos: [],
+    entityYpos: null,
+    foregroundXpos: []
 }
 
 // Get input
@@ -137,7 +140,7 @@ const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElemen
 
 const draw = (ctx: CanvasRenderingContext2D): void => {
     // Clear the canvas
-    ctx.fillStyle = '#163b6e'
+    ctx.fillStyle = '#161922'
     ctx.fillRect(topX, topY, maxX, maxY)
 
     const drawEntity = (entity: PlayerStatus | Entity, imageIndex: number) => {
@@ -204,21 +207,30 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
         }
     }
 
-    // Draw stuff
+    // Draw foreground
+    for (let i = 0; i < canvasCalcs.foregroundXpos.length; i++) {
+        ctx.drawImage(foreground, canvasCalcs.foregroundXpos[i], 128)
+    }
+
+    // Draw entities
     game.entities.forEach(entity => {
         switch(entity.type) {
             case EntityType.Star:
                 drawEntity(entity, ImageIndex.Star)
                 break
-            case EntityType.Bug:
-                drawEntity(entity, ImageIndex.PlayerIdle) // TEMP!
+            case EntityType.Meteor:
+                drawEntity(entity, ImageIndex.Meteor)
                 break
-            case EntityType.Bug2:
-                drawEntity(entity, ImageIndex.PlayerRunLeft) // TEMP!
+            case EntityType.Meteor2:
+                drawEntity(entity, ImageIndex.Meteor2)
+                break
+            case EntityType.UFO:
+                drawEntity(entity, ImageIndex.UFO)
                 break
         }
     })
 
+    // Draw player
     switch(player.state) {
         case PlayerState.Hidden:
             return
@@ -247,7 +259,7 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
 const handleSpawning = (): void => {
     if (game.state === GameState.Playing) {
         if (game.spawnTickCount >= game.spawnWait) {
-            const badEntityTypes = [EntityType.Bug, EntityType.Bug2]
+            const badEntityTypes = [EntityType.Meteor, EntityType.Meteor2, EntityType.UFO]
             const newEntities = []
             let starsSpawned = 0
             let maxStars = canvasCalcs.maxStars || 0
@@ -337,6 +349,7 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
             }
         })
 
+        let resizeTimer: NodeJS.Timeout | null = null
         const resizeCanvas = (): void => {
             let width = document.getElementById('projects')?.clientWidth
             if (width) {
@@ -344,23 +357,39 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
                 ctx.canvas.width = width
                 ctx.translate(Math.floor(width * .5), Math.floor(ctx.canvas.height * .5))
 
-                // Set some spawning calculations based on canvas width
-                const entitiesPerSpawn = Math.floor(ctx.canvas.width / (game.spriteSize * 2))
-                const entityXpos = []
-
-                for (let i = 0; i < entitiesPerSpawn; i++) {
-                    entityXpos.push(
-                        (Math.floor(-ctx.canvas.width * .5) 
-                        + (i * (game.spriteSize * 2))) 
-                        + (game.spriteSize * .5)
-                    )
+                // Use a timer to limit calculations on resize
+                if (resizeTimer) {
+                    clearTimeout(resizeTimer)
                 }
 
-                canvasCalcs = {
-                    maxStars: Math.floor(ctx.canvas.width / (game.spriteSize * 5)),
-                    entityXpos,
-                    entityYpos: (0 - (ctx.canvas.height * .5)) - game.spriteSize
-                }
+                resizeTimer = setTimeout(() => {
+                    // Set some spawning calculations based on canvas width
+                    const entitiesPerSpawn = Math.floor(ctx.canvas.width / (game.spriteSize * 2))
+                    const entityXpos = []
+                    const foregroundXpos = []
+
+                    for (let i = 0; i < entitiesPerSpawn; i++) {
+                        entityXpos.push(
+                            (Math.floor(-ctx.canvas.width * .5) 
+                            + (i * (game.spriteSize * 2))) 
+                            + (game.spriteSize * .5)
+                        )
+                    }
+
+                    for (let i = 0; i < Math.ceil(ctx.canvas.width / game.spriteSize); i++) {
+                        foregroundXpos.push(
+                            (Math.floor(-ctx.canvas.width * .5) 
+                            + (i * game.spriteSize))
+                        )
+                    }
+
+                    canvasCalcs = {
+                        maxStars: Math.floor(ctx.canvas.width / (game.spriteSize * 5)),
+                        entityXpos,
+                        entityYpos: (0 - (ctx.canvas.height * .5)) - game.spriteSize,
+                        foregroundXpos
+                    }
+                }, 100)
             }
         }
 
