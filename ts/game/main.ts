@@ -1,4 +1,4 @@
-import { GameStatus, PlayerStatus, Entity } from './types'
+import { GameStatus, PlayerStatus, Entity, CanvasCalcs } from './types'
 import { GameState, PlayerState, ImageIndex, EntityType } from './enums'
 import * as PlayerScripts from './states/PlayerScripts'
 
@@ -36,6 +36,13 @@ const spritesheet = new Image()
 spritesheet.src = 'images/gamespritesheet.png'
 
 let topX: number, topY: number, maxX: number, maxY: number
+
+// So we only have to do these calculations when resizing
+let canvasCalcs: CanvasCalcs = {
+    maxStars: null,
+    entityXpos: [0],
+    entityYpos: null
+}
 
 // Get input
 document.addEventListener('keydown', event => {
@@ -237,22 +244,22 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
     }
 }
 
-const handleSpawning = (ctx: CanvasRenderingContext2D): void => {
+const handleSpawning = (): void => {
     if (game.state === GameState.Playing) {
         if (game.spawnTickCount >= game.spawnWait) {
             const badEntityTypes = [EntityType.Bug, EntityType.Bug2]
             const newEntities = []
             let starsSpawned = 0
-            let maxStars = Math.floor(ctx.canvas.width / (game.spriteSize * 5))
+            let maxStars = canvasCalcs.maxStars || 0
             if (maxStars < 1) maxStars = 1
 
             // Spawn bad entities
-            for (let i = 0; i < Math.floor(ctx.canvas.width / (game.spriteSize * 2)); i++) {
+            for (let i = 0; i < canvasCalcs.entityXpos.length; i++) {
                 if (Math.random() > .5) {
                     newEntities.push({
                         type: badEntityTypes[Math.floor(Math.random() * badEntityTypes.length)],
-                        xpos: (topX + (i * (game.spriteSize * 2))) + (game.spriteSize * .5),
-                        ypos: (0 - (ctx.canvas.height * .5)) - game.spriteSize,
+                        xpos: canvasCalcs.entityXpos[i],
+                        ypos: (canvasCalcs.entityYpos || 0),
                         frameIndex: 0,
                         speed: 1 + (Math.random())
                     })
@@ -291,7 +298,7 @@ const gameLoop = (
     if (state) {
         game = {...game, state}
     }
-    handleSpawning(ctx)
+    handleSpawning()
     updateStatus(ctx, gameTextElement)
     draw(ctx)
 
@@ -336,6 +343,24 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
                 ctx.canvas.height = 320
                 ctx.canvas.width = width
                 ctx.translate(Math.floor(width * .5), Math.floor(ctx.canvas.height * .5))
+
+                // Set some spawning calculations based on canvas width
+                const entitiesPerSpawn = Math.floor(ctx.canvas.width / (game.spriteSize * 2))
+                const entityXpos = []
+
+                for (let i = 0; i < entitiesPerSpawn; i++) {
+                    entityXpos.push(
+                        (Math.floor(-ctx.canvas.width * .5) 
+                        + (i * (game.spriteSize * 2))) 
+                        + (game.spriteSize * .5)
+                    )
+                }
+
+                canvasCalcs = {
+                    maxStars: Math.floor(ctx.canvas.width / (game.spriteSize * 5)),
+                    entityXpos,
+                    entityYpos: (0 - (ctx.canvas.height * .5)) - game.spriteSize
+                }
             }
         }
 

@@ -34,4 +34,10 @@ interface PlayerStatus {
     frameIndex: number
 }
 
-export type { GameStatus, PlayerStatus, Entity }
+interface CanvasCalcs {
+    maxStars: number | null
+    entityXpos: number[]
+    entityYpos: number | null
+}
+
+export type { GameStatus, PlayerStatus, Entity, CanvasCalcs }
