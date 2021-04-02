@@ -47,33 +47,6 @@ let canvasCalcs: CanvasCalcs = {
     foregroundXpos: []
 }
 
-// Get input
-document.addEventListener('keydown', event => {
-    switch(game.state) {
-        case GameState.Playing:
-            if (event.key === 'ArrowLeft') {
-                game = {...game, input: { left: true, right: game.input.right }}
-            }
-            if (event.key === 'ArrowRight') {
-                game = {...game, input: { left: game.input.left, right: true }}
-            }
-            break
-    }
-})
-
-document.addEventListener('keyup', event => {
-    switch(game.state) {
-        case GameState.Playing:
-            if (event.key === 'ArrowLeft') {
-                game = {...game, input: { left: false, right: game.input.right }}
-            }
-            if (event.key === 'ArrowRight') {
-                game = {...game, input: { left: game.input.left, right: false }}
-            }
-            break
-    }
-})
-
 const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void => {
     // Update canvas values
     topX = Math.floor(-ctx.canvas.width * .5)
@@ -308,6 +281,7 @@ const gameLoop = (
     gameTextElement: HTMLElement,
     state?: GameState): void => {
     if (state) {
+        ctx.canvas.style.cursor = 'default'
         game = {...game, state}
     }
     handleSpawning()
@@ -340,14 +314,66 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
             if (game.state !== GameState.Playing) {
                 gameTextElement.classList.add('text-grow')
                 gameTextElement.style.color = '#CBD3FF'
+                canvas.style.cursor = 'pointer'
+
+                if (gameTextElement.innerText === 'Paused') {
+                    gameTextElement.innerText = 'Unpause'
+                }
             }
         })
         canvas.addEventListener('mouseout', () => {
             if (game.state !== GameState.Playing) {
                 gameTextElement.classList.remove('text-grow')
                 gameTextElement.style.color = 'white'
+
+                if (gameTextElement.innerText === 'Unpause') {
+                    gameTextElement.innerText = 'Paused'
+                }
             }
         })
+
+        // INPUT
+        // Get keyboard input
+        document.addEventListener('keydown', event => {
+            if (game.state === GameState.Playing) {
+                if (event.key === 'ArrowLeft' || event.key === 'a') {
+                    game = {...game, input: { left: true, right: game.input.right }}
+                }
+                if (event.key === 'ArrowRight' || event.key === 'd') {
+                    game = {...game, input: { left: game.input.left, right: true }}
+                }
+            }
+        })
+        document.addEventListener('keyup', event => {
+            if (game.state === GameState.Playing) {
+                if (event.key === 'ArrowLeft' || event.key === 'a') {
+                    game = {...game, input: { left: false, right: game.input.right }}
+                }
+                if (event.key === 'ArrowRight' || event.key === 'd') {
+                    game = {...game, input: { left: game.input.left, right: false }}
+                }
+            }
+        })
+
+        // Handle mobile touch input
+        canvas.addEventListener('touchstart', event => {
+            if (game.state === GameState.Playing && event.cancelable) {
+                event.preventDefault()
+                if ((event.targetTouches[0] ? event.targetTouches[0].pageX 
+                    : event.changedTouches[event.changedTouches.length-1].pageX) 
+                    < player.xpos + (window.innerWidth * .5)) {
+                    game = {...game, input: { left: true, right: false }}
+                } else {
+                    game = {...game, input: { left: false, right: true }}
+                }
+            }
+        })
+        canvas.addEventListener('touchend', () => {
+            if (game.state === GameState.Playing) {
+                game = {...game, input: { left: false, right: false }}
+            }
+        })
+        //
 
         let resizeTimer: NodeJS.Timeout | null = null
         const resizeCanvas = (): void => {
