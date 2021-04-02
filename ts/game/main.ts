@@ -37,7 +37,7 @@ spritesheet.src = 'images/gamespritesheet.png'
 const foreground = new Image()
 foreground.src = 'images/gameforeground.png'
 
-let topX: number, topY: number, maxX: number, maxY: number
+let startX: number, topY: number, maxX: number, maxY: number
 
 // So we only have to do these calculations when resizing
 let canvasCalcs: CanvasCalcs = {
@@ -49,14 +49,14 @@ let canvasCalcs: CanvasCalcs = {
 
 const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void => {
     // Update canvas values
-    topX = Math.floor(-ctx.canvas.width * .5)
+    startX = Math.floor(-ctx.canvas.width * .5)
     topY = Math.floor(-ctx.canvas.height * .5)
     maxX = ctx.canvas.width
     maxY = ctx.canvas.height
 
     // Reposition the player if they are out of bounds due to resizing
-    if (player.xpos + 5 < topX) {
-        player = {...player, xpos: topX + 1}
+    if (player.xpos + 5 < startX) {
+        player = {...player, xpos: startX + 1}
     } else if ((player.xpos * 2) - 5 > maxX) {
         player = {...player, xpos: Math.floor((maxX * .5) - 1)}
     }
@@ -85,7 +85,7 @@ const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElemen
             player = PlayerScripts.idle(game, player)
             break
         case PlayerState.Running:
-            player = PlayerScripts.running(game, player, topX, maxX)
+            player = PlayerScripts.running(game, player, startX, maxX)
             break
     }
 
@@ -114,7 +114,7 @@ const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElemen
 const draw = (ctx: CanvasRenderingContext2D): void => {
     // Clear the canvas
     ctx.fillStyle = '#161922'
-    ctx.fillRect(topX, topY, maxX, maxY)
+    ctx.fillRect(startX, topY, maxX, maxY)
 
     const drawEntity = (entity: PlayerStatus | Entity, imageIndex: number) => {
         const defaults = {
@@ -225,7 +225,7 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
 
     if (game.state === GameState.Paused) {
         ctx.fillStyle = '#161922'
-        ctx.fillRect(topX, topY, maxX, maxY)
+        ctx.fillRect(startX, topY, maxX, maxY)
     }
 }
 

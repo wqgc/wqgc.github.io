@@ -17,10 +17,10 @@ const idle = ( game: GameStatus, player: PlayerStatus): PlayerStatus => {
 const running = (
     game: GameStatus, 
     player: PlayerStatus, 
-    topX: number, 
+    startX: number, 
     maxX: number): PlayerStatus => {
     if (!(game.input.left && game.input.right)) {
-        if ((game.input.left && player.xpos - 5 < topX)
+        if ((game.input.left && player.xpos - 5 < startX)
             || (game.input.right && (player.xpos * 2) + 5 > maxX)) {
             return player
         }
