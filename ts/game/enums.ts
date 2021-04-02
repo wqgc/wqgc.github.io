@@ -6,13 +6,13 @@ enum GameState {
 }
 
 enum PlayerState {
-    Hidden,
     Idle,
     Running
 }
 
 // I'm matching types up with their image index for more concise code
 enum EntityType {
+    Player = 0,
     Meteor = 4,
     Meteor2 = 5,
     UFO = 6,

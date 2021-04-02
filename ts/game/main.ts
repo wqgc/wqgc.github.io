@@ -22,11 +22,16 @@ const initialGameStatus: GameStatus = {
 }
 
 const initialPlayerStatus: PlayerStatus = {
+    type: EntityType.Player,
     state: PlayerState.Idle,
     xpos: 0,
     ypos: 114,
     speed: 4,
-    frameIndex: 0
+    frameIndex: 0,
+    bboxStartXOffset: 0,
+    bboxStartYOffset: 0,
+    bboxWidth: 0,
+    bboxHeight: 0
 }
 
 let game: GameStatus = initialGameStatus
@@ -47,7 +52,7 @@ let canvasCalcs: CanvasCalcs = {
     foregroundXpos: []
 }
 
-const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void => {
+const updateStatus = (ctx: CanvasRenderingContext2D): void => {
     // Update canvas values
     startX = Math.floor(-ctx.canvas.width * .5)
     topY = Math.floor(-ctx.canvas.height * .5)
@@ -64,7 +69,6 @@ const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElemen
     // Pause the game if we unfocus it
     if (document.activeElement !== ctx.canvas) {
         game = {...game, state: GameState.Paused}
-        gameTextElement.innerText = 'Paused'
     }
 
     // Gradually increase the fall speed of entities
@@ -111,7 +115,7 @@ const updateStatus = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElemen
     }
 }
 
-const draw = (ctx: CanvasRenderingContext2D): void => {
+const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void => {
     // Clear the canvas
     ctx.fillStyle = '#161922'
     ctx.fillRect(startX, topY, maxX, maxY)
@@ -188,12 +192,23 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
     // Draw entities
     game.entities.forEach(entity => {
         drawEntity(entity, entity.type)
+
+        // JUST FOR TESTING WHERE COLLISION IS...
+        /*
+        ctx.globalAlpha = .5
+        ctx.fillStyle = 'red'
+        ctx.fillRect(
+            (entity.xpos - (game.spriteSize * .5)) + entity.bboxStartXOffset, 
+            (entity.ypos - (game.spriteSize * .5)) + entity.bboxStartYOffset, 
+            entity.bboxWidth,
+            entity.bboxHeight
+        )
+        ctx.globalAlpha = 1
+        */
     })
 
     // Draw player
     switch(player.state) {
-        case PlayerState.Hidden:
-            return
         case PlayerState.Idle:
             drawEntity(player, ImageIndex.PlayerIdle)
             break
@@ -210,30 +225,73 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
             break
     }
 
-    if (game.state === GameState.Paused) {
+    if (game.state === GameState.Paused || game.state === GameState.GameOver) {
         ctx.fillStyle = '#161922'
         ctx.fillRect(startX, topY, maxX, maxY)
+        if (game.state === GameState.Paused) {
+            gameTextElement.innerText = 'Paused'
+        } else if (game.state === GameState.GameOver) {
+            gameTextElement.innerText = 'Game Over'
+            // TO DO: Display score
+
+            // Reset game/player data
+            game = initialGameStatus
+            player = initialPlayerStatus
+        }
     }
+
+    // JUST FOR TESTING WHERE PLAYER COLLISION IS...
+    /*
+    ctx.globalAlpha = .5
+    ctx.fillStyle = 'red'
+    ctx.fillRect(
+        (player.xpos - (game.spriteSize * .5)) + 12, 
+        (player.ypos - (game.spriteSize * .5)) + 2, 
+        game.spriteSize - 25,
+        game.spriteSize - 2
+    )
+    ctx.globalAlpha = 1
+    */
 }
 
 const handleSpawning = (): void => {
     if (game.state === GameState.Playing) {
         if (game.spawnTickCount >= game.spawnWait) {
             const badEntityTypes = [EntityType.Meteor, EntityType.Meteor2, EntityType.UFO]
-            const newEntities = []
+            const newEntities: Entity[] = []
             let starsSpawned = 0
             let maxStars = canvasCalcs.maxStars || 0
             if (maxStars < 1) maxStars = 1
 
             // Spawn bad entities
             for (let i = 0; i < canvasCalcs.entityXpos.length; i++) {
+                const type = badEntityTypes[Math.floor(Math.random() * badEntityTypes.length)]
+                let bbox: number[] = []
+
+                // Set bboxes
+                switch (type) {
+                    case EntityType.Meteor:
+                        bbox = [ 12, 12, game.spriteSize - 24, game.spriteSize - 24 ]
+                        break
+                    case EntityType.Meteor2:
+                        bbox = [ 22, 22, game.spriteSize - 42, game.spriteSize - 42 ]
+                        break
+                    case EntityType.UFO:
+                        bbox = [ 12, 16, game.spriteSize - 20, game.spriteSize - 28 ]
+                        break
+                }
+
                 if (Math.random() > .5) {
                     newEntities.push({
-                        type: badEntityTypes[Math.floor(Math.random() * badEntityTypes.length)],
+                        type,
                         xpos: canvasCalcs.entityXpos[i],
                         ypos: (canvasCalcs.entityYpos || 0),
                         frameIndex: 0,
-                        speed: 1 + (Math.random())
+                        speed: 1 + (Math.random()),
+                        bboxStartXOffset: bbox[0],
+                        bboxStartYOffset: bbox[1],
+                        bboxWidth: bbox[2],
+                        bboxHeight: bbox[3]
                     })
                 }
             }
@@ -248,7 +306,11 @@ const handleSpawning = (): void => {
                     newEntities[i] = {
                         ...newEntities[i], 
                         type: EntityType.Star, 
-                        speed: .5 + (Math.random())
+                        speed: .5 + (Math.random()),
+                        bboxStartXOffset: 16,
+                        bboxStartYOffset: 14,
+                        bboxWidth: game.spriteSize - 32,
+                        bboxHeight: game.spriteSize - 28
                     }
                     starsSpawned++
                 }
@@ -263,6 +325,47 @@ const handleSpawning = (): void => {
     }
 }
 
+const handleCollision = (): void => {
+    // Initialize player bbox width/height
+    if (player.bboxWidth === 0) {
+        player = {
+            ...player,
+            bboxStartXOffset: 12,
+            bboxStartYOffset: 2,
+            bboxWidth: game.spriteSize - 25,
+            bboxHeight: game.spriteSize - 2
+        }
+    }
+
+    const pStartX = (player.xpos - (game.spriteSize * .5)) 
+        + player.bboxStartXOffset
+    const pTopY = (player.ypos - (game.spriteSize * .5))
+        + player.bboxStartYOffset
+
+    game.entities.forEach((entity, i) => {
+        const eStartX = (entity.xpos - (game.spriteSize * .5)) 
+            + entity.bboxStartXOffset
+        const eTopY = (entity.ypos - (game.spriteSize * .5))
+            + entity.bboxStartYOffset
+
+        if (pStartX < eStartX + entity.bboxWidth &&
+            pStartX + player.bboxWidth > eStartX &&
+            pTopY < eTopY + entity.bboxHeight &&
+            pTopY + player.bboxHeight > eTopY) {
+                if (entity.type === EntityType.Star) {
+                    // For now, the star will just 'disappear'
+                    game.entities[i].ypos = 999 // (temp)
+                    // Add point to score
+                    game = {...game, score: game.score + 1}
+                    console.log(game.score)
+                } else {
+                    // Game over :(
+                    game = {...game, state: GameState.GameOver}
+                }
+            }
+    })
+}
+
 const gameLoop = (
     ctx: CanvasRenderingContext2D,
     gameTextElement: HTMLElement,
@@ -272,8 +375,9 @@ const gameLoop = (
         game = {...game, state}
     }
     handleSpawning()
-    updateStatus(ctx, gameTextElement)
-    draw(ctx)
+    handleCollision()
+    updateStatus(ctx)
+    draw(ctx, gameTextElement)
 
     if (game.state === GameState.Playing) {
         window.requestAnimationFrame(() => gameLoop(ctx, gameTextElement))

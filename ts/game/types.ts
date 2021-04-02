@@ -6,6 +6,10 @@ interface Entity {
     ypos: number
     frameIndex: number
     speed: number
+    bboxStartXOffset: number
+    bboxStartYOffset: number
+    bboxWidth: number
+    bboxHeight: number
 }
 
 interface GameStatus {
@@ -26,12 +30,8 @@ interface GameStatus {
     fallSpeedMultiplier: number
 }
 
-interface PlayerStatus {
+interface PlayerStatus extends Entity {
     state: PlayerState
-    xpos: number
-    ypos: number
-    speed: number
-    frameIndex: number
 }
 
 interface CanvasCalcs {
