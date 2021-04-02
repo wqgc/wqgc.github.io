@@ -187,20 +187,7 @@ const draw = (ctx: CanvasRenderingContext2D): void => {
 
     // Draw entities
     game.entities.forEach(entity => {
-        switch(entity.type) {
-            case EntityType.Star:
-                drawEntity(entity, ImageIndex.Star)
-                break
-            case EntityType.Meteor:
-                drawEntity(entity, ImageIndex.Meteor)
-                break
-            case EntityType.Meteor2:
-                drawEntity(entity, ImageIndex.Meteor2)
-                break
-            case EntityType.UFO:
-                drawEntity(entity, ImageIndex.UFO)
-                break
-        }
+        drawEntity(entity, entity.type)
     })
 
     // Draw player

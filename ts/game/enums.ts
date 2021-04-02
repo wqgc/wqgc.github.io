@@ -11,11 +11,12 @@ enum PlayerState {
     Running
 }
 
+// I'm matching types up with their image index for more concise code
 enum EntityType {
-    Meteor,
-    Meteor2,
-    UFO,
-    Star
+    Meteor = 4,
+    Meteor2 = 5,
+    UFO = 6,
+    Star = 3
 }
 
 // Numbers are listed for quick reference

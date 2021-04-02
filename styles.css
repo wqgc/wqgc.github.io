@@ -240,3 +240,7 @@ canvas {
 .text-grow {
     transform: scale(1.1);
 }
+
+.highlight {
+    color: #7c00a1;
+}
