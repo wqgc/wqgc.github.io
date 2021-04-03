@@ -116,7 +116,7 @@ hr {
     background-color: white;
     border-radius: 4px;
     padding: 4px 18px;
-    margin: 16px 8px;
+    margin: 16px 0;
     box-shadow: 0 4px 4px rgb(116, 123, 167);
 }
 
@@ -164,7 +164,7 @@ hr {
 .project img {
     width: 400px;
     align-self: center;
-    margin-top: 16px;
+    margin: 16px 16px 0 16px;
 }
 
 .project--column {
@@ -172,7 +172,7 @@ hr {
     align-items: center;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
     main {
         border-radius: 0;
     }
