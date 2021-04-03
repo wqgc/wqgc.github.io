@@ -225,14 +225,25 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
             break
     }
 
+    // Draw score
+    ctx.fillStyle = 'white'
+    ctx.font = '24px VT323'
+    ctx.fillText(
+        `SCORE: ${game.score}`, 
+        startX + 12, 
+        topY + 24
+    )
+
+    // Draw other game states
     if (game.state === GameState.Paused || game.state === GameState.GameOver) {
         ctx.fillStyle = '#161922'
         ctx.fillRect(startX, topY, maxX, maxY)
         if (game.state === GameState.Paused) {
+            gameTextElement.style.top = '140'
             gameTextElement.innerText = 'Paused'
         } else if (game.state === GameState.GameOver) {
-            gameTextElement.innerText = 'Game Over'
-            // TO DO: Display score
+            gameTextElement.style.top = '120'
+            gameTextElement.innerHTML = `Game Over <br> SCORE: ${game.score}`
 
             // Reset game/player data
             game = initialGameStatus
