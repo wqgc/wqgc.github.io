@@ -16,7 +16,8 @@ enum EntityType {
     Meteor = 4,
     Meteor2 = 5,
     UFO = 6,
-    Star = 3
+    Star = 3,
+    StarCaught = 7
 }
 
 // Numbers are listed for quick reference
@@ -27,7 +28,8 @@ enum ImageIndex {
     Star = 3,
     Meteor = 4,
     Meteor2 = 5,
-    UFO = 6
+    UFO = 6,
+    StarCaught = 7
 }
 
 export { GameState, PlayerState, EntityType, ImageIndex }

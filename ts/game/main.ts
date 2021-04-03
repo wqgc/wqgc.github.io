@@ -96,7 +96,8 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
     // Make entities fall/clear them when out of canvas
     const entityArr: Entity[] = []
     game.entities.forEach(entity => {
-        if (entity.ypos >= ctx.canvas.height - game.spriteSize) {
+        if (entity.ypos >= ctx.canvas.height - game.spriteSize ||
+            entity.cycled) {
             return
         }
         entityArr.push({
@@ -145,43 +146,6 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
             defaults.dWidth,
             defaults.dHeight
         )
-    }
-
-    // Update current frame
-    if (game.tickCount === game.tickRate) {
-        // Update player frames
-        if (!(player.state === PlayerState.Idle && game.tickSkip)) {
-            player = {
-                ...player, 
-                frameIndex: (
-                    player.frameIndex === game.spriteFrameCount - 1 ? 0
-                    : player.frameIndex + 1
-                )
-            }
-        }
-        
-        // Update non-player entity frames
-        const entityArr: Entity[] = []
-        game.entities.forEach(entity => {
-            if (!game.tickSkip) {
-                entityArr.push({
-                    ...entity,
-                    frameIndex: (
-                        entity.frameIndex === game.spriteFrameCount - 1 ? 0
-                        : entity.frameIndex + 1
-                    )
-                })
-            } else {
-                entityArr.push(entity)
-            }
-        })
-
-        game = {
-            ...game, 
-            entities: entityArr, 
-            tickSkip: !game.tickSkip, 
-            tickCount: 0
-        }
     }
 
     // Draw foreground
@@ -263,6 +227,61 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
     )
     ctx.globalAlpha = 1
     */
+
+    // Update current frame
+    if (game.tickCount === game.tickRate) {
+        // Update player frames
+        if (!(player.state === PlayerState.Idle && game.tickSkip)) {
+            player = {
+                ...player, 
+                frameIndex: (
+                    player.frameIndex === game.spriteFrameCount - 1 ? 0
+                    : player.frameIndex + 1
+                )
+            }
+        }
+        
+        // Update non-player entity frames
+        const entityArr: Entity[] = []
+        game.entities.forEach(entity => {
+            if (entity.type !== EntityType.StarCaught) {
+                if (!game.tickSkip) {
+                    entityArr.push({
+                        ...entity,
+                        frameIndex: (
+                            entity.frameIndex === game.spriteFrameCount - 1 ? 0
+                            : entity.frameIndex + 1
+                        )
+                    })
+                } else {
+                    entityArr.push(entity)
+                }
+            } else {
+                if (entity.frameIndex === game.spriteFrameCount - 1) {
+                    entityArr.push({
+                        ...entity,
+                        frameIndex: 0,
+                        cycled: true
+                    })
+                } else {
+                    entityArr.push({
+                        ...entity,
+                        frameIndex: (
+                            entity.frameIndex === game.spriteFrameCount - 1 ? 0
+                            : entity.frameIndex + 1
+                        )
+                    })
+                }
+            }
+        })
+
+        game = {
+            ...game, 
+            entities: entityArr, 
+            tickSkip: !game.tickSkip, 
+            tickCount: 0
+        }
+    }
 }
 
 const handleSpawning = (): void => {
@@ -348,32 +367,51 @@ const handleCollision = (): void => {
         }
     }
 
-    const pStartX = (player.xpos - (game.spriteSize * .5)) 
-        + player.bboxStartXOffset
-    const pTopY = (player.ypos - (game.spriteSize * .5))
-        + player.bboxStartYOffset
+    // Collision detection is wrapped with this condition because
+    // we don't need to check it that often
+    if (!game.tickCount && game.tickSkip) {
+        const pStartX = (player.xpos - (game.spriteSize * .5)) 
+            + player.bboxStartXOffset
+        const pTopY = (player.ypos - (game.spriteSize * .5))
+            + player.bboxStartYOffset
 
-    game.entities.forEach((entity, i) => {
-        const eStartX = (entity.xpos - (game.spriteSize * .5)) 
-            + entity.bboxStartXOffset
-        const eTopY = (entity.ypos - (game.spriteSize * .5))
-            + entity.bboxStartYOffset
+        const entityArr: Entity[] = []
+        let caughtStar = false
+        game.entities.forEach(entity => {
+            const eStartX = (entity.xpos - (game.spriteSize * .5)) 
+                + entity.bboxStartXOffset
+            const eTopY = (entity.ypos - (game.spriteSize * .5))
+                + entity.bboxStartYOffset
 
-        if (pStartX < eStartX + entity.bboxWidth &&
-            pStartX + player.bboxWidth > eStartX &&
-            pTopY < eTopY + entity.bboxHeight &&
-            pTopY + player.bboxHeight > eTopY) {
-                if (entity.type === EntityType.Star) {
-                    // For now, the star will just 'disappear'
-                    game.entities[i].ypos = 999 // (temp)
-                    // Add point to score
-                    game = {...game, score: game.score + 1}
-                } else {
-                    // Game over :(
-                    game = {...game, state: GameState.GameOver}
+            if (pStartX < eStartX + entity.bboxWidth &&
+                pStartX + player.bboxWidth > eStartX &&
+                pTopY < eTopY + entity.bboxHeight &&
+                pTopY + player.bboxHeight > eTopY) {
+                    if (entity.type === EntityType.Star) {
+                        entityArr.push({
+                            ...entity,
+                            type: EntityType.StarCaught,
+                            frameIndex: 0,
+                            cycled: false
+                        })
+                        caughtStar = true
+                        // Add point to score
+                        game = {...game, score: game.score + 1}
+                        return
+                    } else if (entity.type !== EntityType.StarCaught) {
+                        // Game over :(
+                        game = {...game, state: GameState.GameOver}
+                        return
+                    }
                 }
-            }
-    })
+                entityArr.push(entity)
+        })
+
+        // We only need to update this if a star was caught
+        if (caughtStar) {
+            game = {...game, entities: entityArr}
+        }
+    }
 }
 
 const gameLoop = (

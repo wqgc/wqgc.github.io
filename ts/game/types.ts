@@ -5,11 +5,12 @@ interface Entity {
     xpos: number
     ypos: number
     frameIndex: number
-    speed: number
+    speed: number // Base speed
     bboxStartXOffset: number
     bboxStartYOffset: number
     bboxWidth: number
     bboxHeight: number
+    cycled?: boolean // Check if the animation has finished
 }
 
 interface GameStatus {
