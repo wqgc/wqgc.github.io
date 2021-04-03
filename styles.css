@@ -140,20 +140,20 @@ hr {
     color: white;
 }
 
-#skills ul {
+#skills-container ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 24px;
 }
 
-#skills img {
+#skills-container img {
     max-height: 80px;
     padding: 8px 18px;
     transition: all .2s ease-in-out;
 }
 
-#skills img:hover {
+#skills-container img:hover {
     transform: scale(1.1);
 }
 
@@ -219,7 +219,7 @@ canvas {
     cursor: pointer;
 }
 
-#skills-anchor, #projects-anchor, #contact-anchor {
+#skills, #projects, #contact {
     position: relative;
     top: -72px;
 }
