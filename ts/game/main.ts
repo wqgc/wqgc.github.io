@@ -78,8 +78,8 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
         if (spawnWait > 60) {
             spawnWait -= .1
         }
-        if (fallSpeedMultiplier < 3) {
-            fallSpeedMultiplier += .001
+        if (fallSpeedMultiplier < 10) {
+            fallSpeedMultiplier += .0005
         }
     }
 
@@ -368,7 +368,6 @@ const handleCollision = (): void => {
                     game.entities[i].ypos = 999 // (temp)
                     // Add point to score
                     game = {...game, score: game.score + 1}
-                    console.log(game.score)
                 } else {
                     // Game over :(
                     game = {...game, state: GameState.GameOver}
@@ -492,7 +491,7 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
 
                 resizeTimer = setTimeout(() => {
                     // Set some spawning calculations based on canvas width
-                    const entitiesPerSpawn = Math.floor(ctx.canvas.width / (game.spriteSize * 2))
+                    const entitiesPerSpawn = Math.ceil(ctx.canvas.width / (game.spriteSize * 2))
                     const entityXpos = []
                     const foregroundXpos = []
 
