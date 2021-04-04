@@ -245,3 +245,71 @@ canvas {
 .highlight {
     color: #7c00a1;
 }
+
+textarea {
+    resize: none;
+    height: 100px;
+}
+
+input {
+    height: 32px;
+}
+
+textarea, input {
+    width: 100%;
+    box-shadow: 0 4px 20px rgb(227, 227, 240) inset;
+    border: 2px solid rgb(194, 206, 219);
+    border-radius: 4px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1em;
+    padding: 4px;
+}
+
+label {
+    font-weight: bold;
+}
+
+#contact-container p {
+    margin-bottom: 2px;
+    text-align: center;
+}
+
+#contact-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 4px 12px 4px;
+    padding-top: 0;
+}
+
+#contact-form div {
+    width: 100%;
+    max-width: 420px;
+    padding: 6px 0;
+}
+
+#send {
+    margin: 14px 0 8px 0;
+    width: 100%;
+    max-width: 420px;
+    font-size: 1.1em;
+    border: 2px solid #161922;
+    background-color: #161922;
+    box-shadow: 0 4px 10px rgb(168, 176, 221);
+    border-radius: 4px;
+    color: white;
+    padding: 12px;
+    cursor: pointer;
+}
+
+#send:hover {
+    color: rgb(255, 237, 198);
+}
+
+.required {
+    color: rgb(204, 7, 7);
+}
+
+.nowrap {
+    white-space: nowrap;
+}

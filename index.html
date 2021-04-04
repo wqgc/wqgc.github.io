@@ -120,8 +120,41 @@
                 <hr>
                 <div class='box'>
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        Want to talk? 
+                        <span class='nowrap'>Send me a message.</span>
                     </p>
+                    <form id='contact-form' onsubmit='return false'>
+                        <div>
+                            <div>
+                                <label for='name'>
+                                    Name
+                                </label> 
+                                <span class='required'>*</span>
+                            </div>
+                            <input type='text' name='name' required>
+                        </div>
+                        <div>
+                            <div>
+                                <label for='email'>
+                                    E-Mail
+                                </label>
+                                <span class='required'>*</span>
+                            </div>
+                            <input type='text' name='email' required>
+                        </div>
+                        <div>
+                            <div>
+                                <label for='message'>
+                                    Message
+                                </label>
+                                <span class='required'>*</span>
+                            </div>
+                            <textarea name='content' required></textarea>
+                        </div>
+                        <button id='send'>
+                            Send Message
+                        </button>
+                    </form>
                 </div>
             </section>
         </main>

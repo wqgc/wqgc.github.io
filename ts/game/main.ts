@@ -439,12 +439,16 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
     const gameTextElement = document.getElementById('game-text')
     const ctx = canvas.getContext('2d')
     if (ctx !== null && gameTextElement) {
+        const startGame = (): void => {
+            window.requestAnimationFrame(() => (
+                gameLoop(ctx, gameTextElement, GameState.Playing)
+            ))
+            gameTextElement.innerText = ''
+        }
+
         canvas.addEventListener('click', () => {
             if (game.state !== GameState.Playing) {
-                window.requestAnimationFrame(() => (
-                    gameLoop(ctx, gameTextElement, GameState.Playing)
-                ))
-                gameTextElement.innerText = ''
+                startGame()
             }
         })
 
@@ -473,7 +477,10 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
 
         // INPUT
         // Get keyboard input
-        document.addEventListener('keydown', event => {
+        canvas.addEventListener('keydown', event => {
+            if (event.key !== 'Tab') {
+                event.preventDefault()
+            }
             if (game.state === GameState.Playing) {
                 if (event.key === 'ArrowLeft' || event.key === 'a') {
                     game = {...game, input: { left: true, right: game.input.right }}
@@ -481,9 +488,11 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
                 if (event.key === 'ArrowRight' || event.key === 'd') {
                     game = {...game, input: { left: game.input.left, right: true }}
                 }
+            } else if (event.key === 'Enter' || event.key === 'Spacebar' || event.key === ' ') {
+                startGame()
             }
         })
-        document.addEventListener('keyup', event => {
+        canvas.addEventListener('keyup', event => {
             if (game.state === GameState.Playing) {
                 if (event.key === 'ArrowLeft' || event.key === 'a') {
                     game = {...game, input: { left: false, right: game.input.right }}
