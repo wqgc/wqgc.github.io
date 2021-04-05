@@ -106,9 +106,7 @@
                             under the "ts" folder.
                         </p>
                     </div>
-                    <div id='game-text'>
-                        Game Start
-                    </div>
+                    <div id='game-text'></div>
                     <canvas id='game' tabindex=0>
                         There's supposed to be a game here, but you have JavaScript disabled or your browser doesn't support Canvas.
                     </canvas>
@@ -118,12 +116,12 @@
             <section id='contact-container'>
                 <h2>Contact</h2>
                 <hr>
-                <div class='box'>
-                    <p>
+                <div class='box js-only'>
+                    <p class='center-text'>
                         Want to talk? 
                         <span class='nowrap'>Send me a message.</span>
                     </p>
-                    <form id='contact-form' onsubmit='return false'>
+                    <form id='contact-form'>
                         <div>
                             <div>
                                 <label for='name'>
@@ -131,8 +129,9 @@
                                 </label> 
                                 <span class='required'>*</span>
                             </div>
-                            <input type='text' name='name' required>
+                            <input id='name-input' type='text' name='name'>
                         </div>
+                        <div id='name-error' class='required'></div>
                         <div>
                             <div>
                                 <label for='email'>
@@ -140,8 +139,9 @@
                                 </label>
                                 <span class='required'>*</span>
                             </div>
-                            <input type='text' name='email' required>
+                            <input id='email-input' type='text' name='email'>
                         </div>
+                        <div id='email-error' class='required'></div>
                         <div>
                             <div>
                                 <label for='message'>
@@ -149,12 +149,20 @@
                                 </label>
                                 <span class='required'>*</span>
                             </div>
-                            <textarea name='content' required></textarea>
+                            <textarea id='content-input' name='content'></textarea>
                         </div>
+                        <div id='content-error' class='required'></div>
                         <button id='send'>
                             Send Message
                         </button>
+                        <div id='general-error' class='required'></div>
                     </form>
+                </div>
+                <div class='box'>
+                    <!-- GitHub and LinkedIn here later -->
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec orci ipsum, fringilla ac purus quis, rhoncus feugiat lectus. Nulla efficitur, tortor eget blandit varius, diam eros auctor dolor, at lacinia lorem erat nec diam.
+                    </p>
                 </div>
             </section>
         </main>

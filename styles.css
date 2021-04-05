@@ -269,7 +269,7 @@ label {
     font-weight: bold;
 }
 
-#contact-container p {
+.center-text {
     margin-bottom: 2px;
     text-align: center;
 }
@@ -310,6 +310,14 @@ label {
     color: rgb(204, 7, 7);
 }
 
+#name-error, #email-error, #content-error {
+    display: none;
+}
+
 .nowrap {
     white-space: nowrap;
+}
+
+.js-only {
+    display: none;
 }

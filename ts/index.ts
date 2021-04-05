@@ -1,4 +1,5 @@
 import runGame from './game/main'
+import contact from './contact'
 const Typewriter = require('typewriter-effect/dist/core')
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -30,8 +31,15 @@ window.addEventListener('DOMContentLoaded', () => {
             .start()
     }
     setupTypewriter()
+
+    // Unhide js-only content
+    const jsOnly = document.getElementsByClassName('js-only')
+    for (let i = 0; i < jsOnly.length; i++) {
+        jsOnly[i].classList.remove('js-only')
+    }
     
     runGame(document.getElementById('game') as HTMLCanvasElement)
+    contact()
 })
 
 export {}

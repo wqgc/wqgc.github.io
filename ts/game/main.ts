@@ -439,6 +439,8 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
     const gameTextElement = document.getElementById('game-text')
     const ctx = canvas.getContext('2d')
     if (ctx !== null && gameTextElement) {
+        gameTextElement.innerText = 'Game Start'
+
         const startGame = (): void => {
             window.requestAnimationFrame(() => (
                 gameLoop(ctx, gameTextElement, GameState.Playing)
