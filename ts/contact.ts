@@ -7,6 +7,9 @@ const contact = (): void => {
     form.addEventListener('submit', event => {
         event.preventDefault()
 
+        const success = document.getElementById('general-success') as HTMLElement
+        const button = document.getElementById('send') as HTMLButtonElement
+
         const name = document.getElementById('name-input') as HTMLInputElement
         const email = document.getElementById('email-input') as HTMLInputElement
         const content = document.getElementById('content-input') as HTMLInputElement
@@ -18,6 +21,12 @@ const contact = (): void => {
 
         console.log(`${name.value} ${email.value} ${content.value}`)
 
+        // Clear previous messages
+        nameError.style.display = 'none'
+        emailError.style.display = 'none'
+        contentError.style.display = 'none'
+        success.style.display = 'none'
+
         // Do frontend validation/handle error displaying
         let hasError = false
         let missingError = 'is required.'
@@ -27,11 +36,19 @@ const contact = (): void => {
             nameError.style.display = 'block'
             hasError = true
         }
+
+        const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/
+        if (!emailRegex.test(email.value)) {
+            emailError.innerText = 'Invalid e-mail.'
+            emailError.style.display = 'block'
+            hasError = true
+        }
         if (!email.value) {
             emailError.innerText = `E-Mail ${missingError}`
             emailError.style.display = 'block'
             hasError = true
         }
+
         if (!content.value) {
             contentError.innerText = `A message ${missingError}`
             contentError.style.display = 'block'
@@ -39,6 +56,9 @@ const contact = (): void => {
         }
 
         if (!hasError) {
+            button.innerText = 'Sending...'
+            button.disabled = true
+
             fetch('https://portfolio-backend-one.vercel.app/api', {
                 method: 'POST',
                 headers: {
@@ -50,12 +70,32 @@ const contact = (): void => {
                     content: content.value 
                 })
             })
-            .then(response => response.json())
-            .then(result => console.log(result))
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP Status ${response.status}`)
+                }
+                return response.json()
+            })
+            .then(result => {
+                console.log(result)
+                // Show success
+                generalError.style.display = 'none'
+                success.innerText = 'Message successfully sent!'
+                success.style.display = 'block'
+                // Clear inputs
+                name.value = ''
+                email.value = ''
+                content.value = ''
+            })
             .catch(error => {
-                console.error(error)
-                generalError.innerText = `Looks like something went wrong serverside. We can still get in touch through other sites below.`
+                console.error(`Error: ${JSON.stringify(error)}`)
+                generalError.innerText = `Looks like something went wrong serverside.`
                 generalError.style.display = 'block'
+            })
+            .finally(() => {
+                // Change button
+                button.innerText = 'Send Message'
+                button.disabled = false
             })
         }
     })

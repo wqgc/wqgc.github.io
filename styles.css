@@ -269,7 +269,7 @@ label {
     font-weight: bold;
 }
 
-.less-margin {
+#contact-head {
     margin-bottom: 2px;
 }
 
@@ -313,8 +313,16 @@ label {
     color: rgb(204, 7, 7);
 }
 
-#name-error, #email-error, #content-error {
+.success {
+    color: rgb(6, 80, 61);
+}
+
+.error {
     display: none;
+}
+
+#general-success, #general-error {
+    margin-top: 6px;
 }
 
 .nowrap {
