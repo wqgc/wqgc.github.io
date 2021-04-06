@@ -54,7 +54,7 @@ const contact = (): void => {
             .then(result => console.log(result))
             .catch(error => {
                 console.error(error)
-                generalError.innerText = `Looks like something went wrong with the server. You can still contact me through LinkedIn below.`
+                generalError.innerText = `Looks like something went wrong serverside. We can still get in touch through other sites below.`
                 generalError.style.display = 'block'
             })
         }

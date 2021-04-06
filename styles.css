@@ -269,8 +269,11 @@ label {
     font-weight: bold;
 }
 
-.center-text {
+.less-margin {
     margin-bottom: 2px;
+}
+
+.center-text {
     text-align: center;
 }
 
@@ -320,4 +323,16 @@ label {
 
 .js-only {
     display: none;
+}
+
+.github-icon {
+    position: relative;
+    top: 1;
+    left: 2;
+}
+
+.linkedin-icon {
+    position: relative;
+    top: 2;
+    left: 2;
 }
