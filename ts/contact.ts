@@ -13,6 +13,7 @@ const contact = (): void => {
         const name = document.getElementById('name-input') as HTMLInputElement
         const email = document.getElementById('email-input') as HTMLInputElement
         const content = document.getElementById('content-input') as HTMLInputElement
+        const hp = document.getElementById('hp') as HTMLInputElement
 
         const nameError = document.getElementById('name-error') as HTMLInputElement
         const emailError = document.getElementById('email-error') as HTMLInputElement
@@ -20,6 +21,8 @@ const contact = (): void => {
         const generalError = document.getElementById('general-error') as HTMLInputElement
 
         console.log(`${name.value} ${email.value} ${content.value}`)
+
+        if (hp.value) return
 
         // Clear previous messages
         nameError.style.display = 'none'
