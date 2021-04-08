@@ -309,6 +309,10 @@ label {
     color: rgb(255, 237, 198);
 }
 
+#send:disabled {
+    cursor: default;
+}
+
 .required {
     color: rgb(204, 7, 7);
 }
