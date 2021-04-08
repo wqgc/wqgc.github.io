@@ -20,8 +20,6 @@ const contact = (): void => {
         const contentError = document.getElementById('content-error') as HTMLInputElement
         const generalError = document.getElementById('general-error') as HTMLInputElement
 
-        console.log(`${name.value} ${email.value} ${content.value}`)
-
         if (hp.value) return
 
         // Clear previous messages
@@ -80,7 +78,6 @@ const contact = (): void => {
                 return response.json()
             })
             .then(result => {
-                console.log(result)
                 // Show success
                 generalError.style.display = 'none'
                 success.innerText = 'Message successfully sent!'
