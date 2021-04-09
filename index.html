@@ -145,12 +145,13 @@
                             </div>
                             <div id='email-error' class='required error'></div>
                             <div>
-                                <label for='message-input'>
+                                <label for='content-input'>
                                     Message
                                 </label>
                                 <textarea id='content-input' name='content'></textarea>
                             </div>
-                            <input id='hp' type='text' name='dont-fill'>
+                            <label for='hp' class='hp'>Do not fill this</label>
+                            <input id='hp' type='text' name='dont-fill' class='hp' tabindex='-1'>
                             <div id='content-error' class='required error'></div>
                             <button id='send'>
                                 Send Message
