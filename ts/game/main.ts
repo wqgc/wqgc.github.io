@@ -203,10 +203,10 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
         ctx.fillStyle = '#161922'
         ctx.fillRect(startX, topY, maxX, maxY)
         if (game.state === GameState.Paused) {
-            gameTextElement.style.top = '140'
+            gameTextElement.style.top = '140px'
             gameTextElement.innerText = 'Paused'
         } else if (game.state === GameState.GameOver) {
-            gameTextElement.style.top = '120'
+            gameTextElement.style.top = '120px'
             gameTextElement.innerHTML = `Game Over <br> SCORE: ${game.score}`
 
             // Reset game/player data

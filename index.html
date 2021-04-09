@@ -1,185 +1,177 @@
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css" type="text/css">
-    <script src="script.js"></script>
-    <title>Portfolio</title>
-</head>
-<body>
-    <div id='container'>
-        <div class='nav-spacer'></div>
-        <nav>
-            <ul>
-                <li><a id='skills-link' href='#skills'>Skills</a></li>
-                <li><a id='projects-link' href='#projects'>Projects</a></li>
-                <li><a id='contact-link' href='#contact'>Contact</a></li>
-            </ul>
-        </nav>
-        <header>
-            <h1>Rashelle Hopkins</h1>
-            <span class='title'>Web Developer</span>
-            <span class='subtitle'>Creating <span id='cycle'>Interactive Experiences</span></span>
-        </header>
-        <main>
-            <div id='skills'></div>
-            <section id='skills-container'>
-                <h2>Skills</h2>
-                <hr>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap&family=VT323&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css" type="text/css">
+        <script src="script.js"></script>
+        <title>Portfolio</title>
+    </head>
+    <body>
+        <div id='container'>
+            <div class='nav-spacer'></div>
+            <nav>
                 <ul>
-                    <span>
-                        <li>
-                            <img src='/svgs/html-5.svg' title='HTML5 Logo' alt='HTML5'/>
-                        </li>
-                        <li>
-                            <img src='/svgs/css-3.svg' title='CSS3 Logo' alt='CSS3'/>
-                        </li>
-                    </span>
-                    <span>
-                        <li>
-                            <img src='/svgs/javascript.svg' title='JavaScript Logo' alt='JavaScript'/>
-                        </li>
-                        <li>
-                            <img src='/svgs/typescript-icon.svg' title='TypeScript Logo' alt='TypeScript'/>
-                        </li>
-                    </span>
-                    <span>
-                        <li>
-                            <img src='/svgs/react.svg' title='React Logo' alt='React'/>
-                        </li>
-                        <li>
-                            <img src='/svgs/nodejs-icon.svg' title='Node Logo' alt='Node'/>
-                        </li>
-                    </span>
+                    <li><a id='skills-link' href='#skills'>Skills</a></li>
+                    <li><a id='projects-link' href='#projects'>Projects</a></li>
+                    <li><a id='contact-link' href='#contact'>Contact</a></li>
                 </ul>
-            </section>
-            <div id='projects'></div>
-            <section id='projects-container'>
-                <h2>Projects</h2>
-                <hr>
-                <div class='project'>
-                    <div class='box'>
-                        <p>
-                            <a href='https://wqgc.github.io/organize-app/' target='_blank'><strong>Organize</strong></a> is perfect for keeping track of notes, lists, and links with an easy to use interface. 
-                            Create pages, sections, and items that you can edit and reorder freely. No sign-ups; data is stored in your browser and can be imported or exported at any time.
-                        </p>
-                        <p>
-                            This <span class='highlight'>Node</span> web app, a solo-project I made, is built with semantic <span class='highlight'>HTML</span>, 
-                            responsive <span class='highlight'>CSS</span>, and programmed in <span class='highlight'>JavaScript</span> 
-                            using <span class='highlight'>TypeScript</span> and the <span class='highlight'>React</span> library.
-                        </p>
-                        <p>
-                            <a href="https://github.com/wqgc/organize-app" target="_blank" rel="noreferrer noopener">
-                                See the code on GitHub
-                            </a>
-                        </p>
+            </nav>
+            <header>
+                <h1>Rashelle Hopkins</h1>
+                <h2 class='title'>Web Developer</h2>
+                <h3 class='subtitle'>Creating <span id='cycle'>Interactive Experiences</span></h3>
+            </header>
+            <main>
+                <div id='skills'></div>
+                <section id='skills-container'>
+                    <h2>Skills</h2>
+                    <hr>
+                    <ul>
+                        <span>
+                            <li>
+                                <img src='/svgs/html-5.svg' title='HTML5 Logo' alt='HTML5'/>
+                            </li>
+                            <li>
+                                <img src='/svgs/css-3.svg' title='CSS3 Logo' alt='CSS3'/>
+                            </li>
+                        </span>
+                        <span>
+                            <li>
+                                <img src='/svgs/javascript.svg' title='JavaScript Logo' alt='JavaScript'/>
+                            </li>
+                            <li>
+                                <img src='/svgs/typescript-icon.svg' title='TypeScript Logo' alt='TypeScript'/>
+                            </li>
+                        </span>
+                        <span>
+                            <li>
+                                <img src='/svgs/react.svg' title='React Logo' alt='React'/>
+                            </li>
+                            <li>
+                                <img src='/svgs/nodejs-icon.svg' title='Node Logo' alt='Node'/>
+                            </li>
+                        </span>
+                    </ul>
+                </section>
+                <div id='projects'></div>
+                <section id='projects-container'>
+                    <h2>Projects</h2>
+                    <hr>
+                    <div class='project'>
+                        <div class='box'>
+                            <p>
+                                <a href='https://rashellehopkins.com/organize-app/' target='_blank' rel='noreferrer noopener'><strong>Organize</strong></a> is perfect for keeping track of notes, lists, and links with an easy to use interface. 
+                                Create pages, sections, and items that you can edit and reorder freely. No sign-ups; data is stored in your browser and can be imported or exported at any time.
+                            </p>
+                            <p>
+                                This <span class='highlight'>Node</span> web app, a solo-project I made, is built with semantic <span class='highlight'>HTML</span>, 
+                                responsive <span class='highlight'>CSS</span>, and programmed in <span class='highlight'>JavaScript</span> 
+                                using <span class='highlight'>TypeScript</span> and the <span class='highlight'>React</span> library.
+                            </p>
+                            <p>
+                                <a href='https://github.com/wqgc/organize-app' target='_blank' rel='noreferrer noopener'>
+                                    See the code on GitHub
+                                </a>
+                            </p>
+                        </div>
+                        <img src='/images/orgwide.png' title='Web App Showcase' alt='Image of website on computer'/>
                     </div>
-                    <img src='/images/orgwide.png' title='Web App Showcase' alt='Image of website on computer'/>
-                </div>
-                <hr class='divider'>
-                <div class='project project--column'>
-                    <div class='box'>
-                        <p>
-                            <strong>Star Catcher</strong>
-                            is a small arcade-style game I solely built with <span class='highlight'>Node</span>, 
-                            <span class='highlight'>JavaScript</span>, and <span class='highlight'>TypeScript</span>. 
-                            It makes use of HTML5's Canvas web API and dynamically scales to the width of the page without 
-                            losing quality.
-                        </p>
-                        <p>
-                            <strong>Keyboard:</strong>
-                            Use the <span class='highlight'>Left</span> and <span class='highlight'>Right</span> arrow keys
-                            or <span class='highlight'>A</span> and <span class='highlight'>D</span> to move.
-                            <br>
-                            <strong>Touchscreen:</strong>
-                            <span class='highlight'>Tap</span> and <span class='highlight'>hold</span> to move.
-                        </p>
-                        <p>
-                            Catch stars to get points, but avoid everything else! Hit <strong>Game Start</strong> to begin.
-                        </p>
-                        <p>
-                            You can find the code in my portfolio
-                            <a href="https://github.com/wqgc/portfolio" target="_blank" rel="noreferrer noopener">GitHub repo</a>
-                            under the "ts" folder.
-                        </p>
+                    <hr class='divider'>
+                    <div class='project project--column'>
+                        <div class='box'>
+                            <p>
+                                <strong>Star Catcher</strong>
+                                is a small arcade-style game I solely built with <span class='highlight'>Node</span>, 
+                                <span class='highlight'>JavaScript</span>, and <span class='highlight'>TypeScript</span>. 
+                                It makes use of HTML5's Canvas web API and dynamically scales to the width of the page without 
+                                losing quality.
+                            </p>
+                            <p>
+                                <strong>Keyboard:</strong>
+                                Use the <span class='highlight'>Left</span> and <span class='highlight'>Right</span> arrow keys
+                                or <span class='highlight'>A</span> and <span class='highlight'>D</span> to move.
+                                <br>
+                                <strong>Touchscreen:</strong>
+                                <span class='highlight'>Tap</span> and <span class='highlight'>hold</span> to move.
+                            </p>
+                            <p>
+                                Catch stars to get points, but avoid everything else! Hit <strong>Game Start</strong> to begin.
+                            </p>
+                            <p>
+                                You can find the code in my portfolio
+                                <a href='https://github.com/wqgc/portfolio' target='_blank' rel='noreferrer noopener'>GitHub repo</a>
+                                under the "ts" folder.
+                            </p>
+                        </div>
+                        <div id='game-text'></div>
+                        <canvas id='game' tabindex=0>
+                            There's supposed to be a game here, but you have JavaScript disabled or your browser doesn't support Canvas.
+                        </canvas>
                     </div>
-                    <div id='game-text'></div>
-                    <canvas id='game' tabindex=0>
-                        There's supposed to be a game here, but you have JavaScript disabled or your browser doesn't support Canvas.
-                    </canvas>
-                </div>
-            </section>
-            <div id='contact'></div>
-            <section id='contact-container'>
-                <h2>Contact</h2>
-                <hr>
-                <div class='box js-only'>
-                    <p id='contact-head' class='center-text'>
-                        Want to talk? 
-                        <span class='nowrap'>Send me a message.</span>
-                    </p>
-                    <form id='contact-form'>
-                        <div>
+                </section>
+                <div id='contact'></div>
+                <section id='contact-container'>
+                    <h2>Contact</h2>
+                    <hr>
+                    <div class='box js-only'>
+                        <p id='contact-head' class='center-text'>
+                            Want to talk? 
+                            <span class='nowrap'>Send me a message.</span>
+                        </p>
+                        <form id='contact-form'>
                             <div>
                                 <label for='name'>
                                     Name
                                 </label> 
-                                <span class='required'>*</span>
+                                <input id='name-input' type='text' name='name'>
                             </div>
-                            <input id='name-input' type='text' name='name'>
-                        </div>
-                        <div id='name-error' class='required error'></div>
-                        <div>
+                            <div id='name-error' class='required error'></div>
                             <div>
                                 <label for='email'>
                                     E-Mail
                                 </label>
-                                <span class='required'>*</span>
+                                <input id='email-input' type='text' name='email'>
                             </div>
-                            <input id='email-input' type='text' name='email'>
-                        </div>
-                        <div id='email-error' class='required error'></div>
-                        <div>
+                            <div id='email-error' class='required error'></div>
                             <div>
                                 <label for='message'>
                                     Message
                                 </label>
-                                <span class='required'>*</span>
+                                <textarea id='content-input' name='content'></textarea>
                             </div>
-                            <textarea id='content-input' name='content'></textarea>
-                        </div>
-                        <input id='hp' type='text' name='dont-fill'>
-                        <div id='content-error' class='required error'></div>
-                        <button id='send'>
-                            Send Message
-                        </button>
-                        <div id='general-error' class='required center-text error'></div>
-                        <div id='general-success' class='success center-text error'></div>
-                    </form>
-                </div>
-                <div class='box'>
-                    <strong>
-                        <p class='center-text'>
-                            Find me on
-                            <span class='nowrap'>
-                                <span class='github-icon'>
-                                        <img src='/svgs/github-icon.svg' title='GitHub Logo' alt='GitHub' width=20/>
+                            <input id='hp' type='text' name='dont-fill'>
+                            <div id='content-error' class='required error'></div>
+                            <button id='send'>
+                                Send Message
+                            </button>
+                            <div id='general-error' class='required center-text error'></div>
+                            <div id='general-success' class='success center-text error'></div>
+                        </form>
+                    </div>
+                    <div class='box'>
+                        <strong>
+                            <p class='center-text'>
+                                Find me on
+                                <span class='nowrap'>
+                                    <span class='github-icon'>
+                                            <img src='/svgs/github-icon.svg' title='GitHub Logo' alt='GitHub' width=20/>
+                                    </span>
+                                    <a href='https://github.com/wqgc' target='_blank' rel='noreferrer noopener'>GitHub</a>
+                                    and
+                                    <span class='linkedin-icon'>
+                                        <img src='/svgs/linkedin-icon.svg' title='LinkedIn Logo' alt='LinkedIn' width=20/>
+                                    </span>
+                                    <a href='https://www.linkedin.com/in/rashellehopkins/' target='_blank' rel='noreferrer noopener'>LinkedIn</a>
                                 </span>
-                                <a href='https://github.com/wqgc' target="_blank" rel="noreferrer noopener">GitHub</a>
-                                and
-                                <span class='linkedin-icon'>
-                                    <img src='/svgs/linkedin-icon.svg' title='LinkedIn Logo' alt='LinkedIn' width=20/>
-                                </span>
-                                <a href='https://www.linkedin.com/in/rashellehopkins/' target="_blank" rel="noreferrer noopener">LinkedIn</a>
-                            </span>
-                        </p>
-                    </strong>
-                </div>
-            </section>
-        </main>
-    </div>
-</body>
+                            </p>
+                        </strong>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </body>
 </html>

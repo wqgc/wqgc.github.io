@@ -120,6 +120,12 @@ hr {
     box-shadow: 0 4px 4px rgb(116, 123, 167);
 }
 
+.title, .subtitle {
+    font-weight: normal;
+    margin: 0;
+    padding: 8px;
+}
+
 .title {
     font-size: 1.5em;
     color: rgb(224, 237, 253);
@@ -226,7 +232,7 @@ canvas {
 
 #game-text {
     position: relative;
-    top: 140;
+    top: 140px;
     height: 0;
     font-family: 'VT323', monospace;
     font-size: 48px;
@@ -257,20 +263,22 @@ input {
 
 textarea, input {
     width: 100%;
+    box-sizing: border-box;
     box-shadow: 0 4px 20px rgb(227, 227, 240) inset;
     border: 2px solid rgb(194, 206, 219);
     border-radius: 4px;
     font-family: 'Open Sans', sans-serif;
     font-size: 1em;
-    padding: 4px;
+    margin: 4px 0;
 }
 
 label {
     font-weight: bold;
 }
 
-#contact-head {
-    margin-bottom: 2px;
+label:after {
+    content: '*';
+    color: rgb(204, 7, 7);
 }
 
 .center-text {
@@ -292,7 +300,7 @@ label {
 }
 
 #send {
-    margin: 14px 0 8px 0;
+    margin: 4px 0;
     width: 100%;
     max-width: 420px;
     font-size: 1.1em;
@@ -311,10 +319,6 @@ label {
 
 #send:disabled {
     cursor: default;
-}
-
-.required {
-    color: rgb(204, 7, 7);
 }
 
 .success {
@@ -339,14 +343,14 @@ label {
 
 .github-icon {
     position: relative;
-    top: 1;
-    left: 2;
+    top: 1px;
+    left: 2px;
 }
 
 .linkedin-icon {
     position: relative;
-    top: 2;
-    left: 2;
+    top: 2px;
+    left: 2px;
 }
 
 #hp {
