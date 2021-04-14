@@ -517,7 +517,7 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
                     game = {...game, input: { left: false, right: true }}
                 }
             }
-        }, {passive: true})
+        })
         canvas.addEventListener('touchend', () => {
             if (game.state === GameState.Playing) {
                 game = {...game, input: { left: false, right: false }}
