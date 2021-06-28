@@ -1,4 +1,4 @@
-import { GameStatus, PlayerStatus, Entity, CanvasCalcs } from './types'
+import { GameStatus, PlayerStatus, Entity, CanvasCalcs, FullState } from './types'
 import { GameState, PlayerState, ImageIndex, EntityType } from './enums'
 import * as PlayerScripts from './states/PlayerScripts'
 
@@ -52,7 +52,10 @@ let canvasCalcs: CanvasCalcs = {
     foregroundXpos: []
 }
 
-const updateStatus = (ctx: CanvasRenderingContext2D): void => {
+const updateStatus = (
+    ctx: CanvasRenderingContext2D, 
+    prevGame: GameStatus, 
+    prevPlayer: PlayerStatus): FullState => {
     // Update canvas values
     startX = Math.floor(-ctx.canvas.width * .5)
     topY = Math.floor(-ctx.canvas.height * .5)
@@ -60,21 +63,21 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
     maxY = ctx.canvas.height
 
     // Reposition the player if they are out of bounds due to resizing
-    if (player.xpos + 5 < startX) {
-        player = {...player, xpos: startX + 1}
-    } else if ((player.xpos * 2) - 5 > maxX) {
-        player = {...player, xpos: Math.floor((maxX * .5) - 1)}
+    if (prevPlayer.xpos + 5 < startX) {
+        prevPlayer = {...prevPlayer, xpos: startX + 1}
+    } else if ((prevPlayer.xpos * 2) - 5 > maxX) {
+        prevPlayer = {...prevPlayer, xpos: Math.floor((maxX * .5) - 1)}
     }
 
     // Pause the game if we unfocus it
     if (document.activeElement !== ctx.canvas) {
-        game = {...game, state: GameState.Paused}
+        prevGame = {...prevGame, state: GameState.Paused}
     }
 
     // Gradually increase the fall speed of entities
-    let spawnWait = game.spawnWait
-    let fallSpeedMultiplier = game.fallSpeedMultiplier
-    if (game.state === GameState.Playing) {
+    let spawnWait = prevGame.spawnWait
+    let fallSpeedMultiplier = prevGame.fallSpeedMultiplier
+    if (prevGame.state === GameState.Playing) {
         if (spawnWait > 60) {
             spawnWait -= .1
         }
@@ -84,39 +87,45 @@ const updateStatus = (ctx: CanvasRenderingContext2D): void => {
     }
 
     // Handle player states
-    switch(player.state) {
+    switch(prevPlayer.state) {
         case PlayerState.Idle:
-            player = PlayerScripts.idle(game, player)
+            prevPlayer = PlayerScripts.idle(prevGame, prevPlayer)
             break
         case PlayerState.Running:
-            player = PlayerScripts.running(game, player, startX, maxX)
+            prevPlayer = PlayerScripts.running(prevGame, prevPlayer, startX, maxX)
             break
     }
 
     // Make entities fall/clear them when out of canvas
     const entityArr: Entity[] = []
-    game.entities.forEach(entity => {
-        if (entity.ypos >= ctx.canvas.height - game.spriteSize ||
+    prevGame.entities.forEach(entity => {
+        if (entity.ypos >= ctx.canvas.height - prevGame.spriteSize ||
             entity.cycled) {
             return
         }
         entityArr.push({
             ...entity,
-            ypos: entity.ypos + (entity.speed * game.fallSpeedMultiplier)
+            ypos: entity.ypos + (entity.speed * prevGame.fallSpeedMultiplier)
         })
     })
 
-    game = {
-        ...game, 
+    prevGame = {
+        ...prevGame, 
         entities: entityArr, 
         spawnWait,
         fallSpeedMultiplier,
-        spawnTickCount: game.spawnTickCount + 1,
-        tickCount: game.tickCount + 1
+        spawnTickCount: prevGame.spawnTickCount + 1,
+        tickCount: prevGame.tickCount + 1
     }
+
+    return {game: prevGame, player: prevPlayer}
 }
 
-const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void => {
+const draw = (
+    ctx: CanvasRenderingContext2D, 
+    gameTextElement: HTMLElement,
+    prevGame: GameStatus,
+    prevPlayer: PlayerStatus): FullState => {
     // Clear the canvas
     ctx.fillStyle = '#161922'
     ctx.fillRect(startX, topY, maxX, maxY)
@@ -124,16 +133,16 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
     const drawEntity = (entity: PlayerStatus | Entity, imageIndex: number) => {
         const defaults = {
             image: spritesheet as HTMLImageElement,
-            sWidth: game.spriteSize,
-            sHeight: game.spriteSize,
-            dx: Math.floor(entity.xpos - (game.spriteSize * .5)),
-            dy: Math.floor(entity.ypos - (game.spriteSize * .5)),
-            dWidth: game.spriteSize,
-            dHeight: game.spriteSize
+            sWidth: prevGame.spriteSize,
+            sHeight: prevGame.spriteSize,
+            dx: Math.floor(entity.xpos - (prevGame.spriteSize * .5)),
+            dy: Math.floor(entity.ypos - (prevGame.spriteSize * .5)),
+            dWidth: prevGame.spriteSize,
+            dHeight: prevGame.spriteSize
         }
 
-        let sx = entity.frameIndex * game.spriteSize
-        let sy = imageIndex * game.spriteSize
+        let sx = entity.frameIndex * prevGame.spriteSize
+        let sy = imageIndex * prevGame.spriteSize
 
         ctx.drawImage(
             defaults.image,
@@ -154,7 +163,7 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
     }
 
     // Draw entities
-    game.entities.forEach(entity => {
+    prevGame.entities.forEach(entity => {
         drawEntity(entity, entity.type)
 
         // JUST FOR TESTING WHERE COLLISION IS...
@@ -172,19 +181,19 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
     })
 
     // Draw player
-    switch(player.state) {
+    switch(prevPlayer.state) {
         case PlayerState.Idle:
-            drawEntity(player, ImageIndex.PlayerIdle)
+            drawEntity(prevPlayer, ImageIndex.PlayerIdle)
             break
         case PlayerState.Running:
-            if (!(game.input.left && game.input.right)) {
-                if (game.input.left) {
-                    drawEntity(player, ImageIndex.PlayerRunLeft)
-                } else if (game.input.right) {
-                    drawEntity(player, ImageIndex.PlayerRunRight)
+            if (!(prevGame.input.left && prevGame.input.right)) {
+                if (prevGame.input.left) {
+                    drawEntity(prevPlayer, ImageIndex.PlayerRunLeft)
+                } else if (prevGame.input.right) {
+                    drawEntity(prevPlayer, ImageIndex.PlayerRunRight)
                 }
             } else {
-                drawEntity(player, ImageIndex.PlayerIdle)
+                drawEntity(prevPlayer, ImageIndex.PlayerIdle)
             }
             break
     }
@@ -193,25 +202,25 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
     ctx.fillStyle = 'white'
     ctx.font = '24px VT323'
     ctx.fillText(
-        `SCORE: ${game.score}`, 
+        `SCORE: ${prevGame.score}`, 
         startX + 12, 
         topY + 24
     )
 
     // Draw other game states
-    if (game.state === GameState.Paused || game.state === GameState.GameOver) {
+    if (prevGame.state === GameState.Paused || prevGame.state === GameState.GameOver) {
         ctx.fillStyle = '#161922'
         ctx.fillRect(startX, topY, maxX, maxY)
-        if (game.state === GameState.Paused) {
+        if (prevGame.state === GameState.Paused) {
             gameTextElement.style.top = '140px'
             gameTextElement.innerText = 'Paused'
-        } else if (game.state === GameState.GameOver) {
+        } else if (prevGame.state === GameState.GameOver) {
             gameTextElement.style.top = '120px'
-            gameTextElement.innerHTML = `Game Over <br> SCORE: ${game.score}`
+            gameTextElement.innerHTML = `Game Over <br> SCORE: ${prevGame.score}`
 
             // Reset game/player data
-            game = initialGameStatus
-            player = initialPlayerStatus
+            prevGame = initialGameStatus
+            prevPlayer = initialPlayerStatus
         }
     }
 
@@ -229,27 +238,27 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
     */
 
     // Update current frame
-    if (game.tickCount === game.tickRate) {
+    if (prevGame.tickCount === prevGame.tickRate) {
         // Update player frames
-        if (!(player.state === PlayerState.Idle && game.tickSkip)) {
-            player = {
-                ...player, 
+        if (!(prevPlayer.state === PlayerState.Idle && prevGame.tickSkip)) {
+            prevPlayer = {
+                ...prevPlayer, 
                 frameIndex: (
-                    player.frameIndex === game.spriteFrameCount - 1 ? 0
-                    : player.frameIndex + 1
+                    prevPlayer.frameIndex === prevGame.spriteFrameCount - 1 ? 0
+                    : prevPlayer.frameIndex + 1
                 )
             }
         }
         
         // Update non-player entity frames
         const entityArr: Entity[] = []
-        game.entities.forEach(entity => {
+        prevGame.entities.forEach(entity => {
             if (entity.type !== EntityType.StarCaught) {
-                if (!game.tickSkip) {
+                if (!prevGame.tickSkip) {
                     entityArr.push({
                         ...entity,
                         frameIndex: (
-                            entity.frameIndex === game.spriteFrameCount - 1 ? 0
+                            entity.frameIndex === prevGame.spriteFrameCount - 1 ? 0
                             : entity.frameIndex + 1
                         )
                     })
@@ -257,7 +266,7 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
                     entityArr.push(entity)
                 }
             } else {
-                if (entity.frameIndex === game.spriteFrameCount - 1) {
+                if (entity.frameIndex === prevGame.spriteFrameCount - 1) {
                     entityArr.push({
                         ...entity,
                         frameIndex: 0,
@@ -267,7 +276,7 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
                     entityArr.push({
                         ...entity,
                         frameIndex: (
-                            entity.frameIndex === game.spriteFrameCount - 1 ? 0
+                            entity.frameIndex === prevGame.spriteFrameCount - 1 ? 0
                             : entity.frameIndex + 1
                         )
                     })
@@ -275,18 +284,20 @@ const draw = (ctx: CanvasRenderingContext2D, gameTextElement: HTMLElement): void
             }
         })
 
-        game = {
-            ...game, 
+        prevGame = {
+            ...prevGame, 
             entities: entityArr, 
-            tickSkip: !game.tickSkip, 
+            tickSkip: !prevGame.tickSkip, 
             tickCount: 0
         }
     }
+
+    return {game: prevGame, player: prevPlayer}
 }
 
-const handleSpawning = (): void => {
-    if (game.state === GameState.Playing) {
-        if (game.spawnTickCount >= game.spawnWait) {
+const handleSpawning = (prevGame: GameStatus): GameStatus => {
+    if (prevGame.state === GameState.Playing) {
+        if (prevGame.spawnTickCount >= prevGame.spawnWait) {
             const badEntityTypes = [EntityType.Meteor, EntityType.Meteor2, EntityType.UFO]
             const newEntities: Entity[] = []
             let starsSpawned = 0
@@ -301,13 +312,13 @@ const handleSpawning = (): void => {
                 // Set bboxes
                 switch (type) {
                     case EntityType.Meteor:
-                        bbox = [ 12, 12, game.spriteSize - 24, game.spriteSize - 24 ]
+                        bbox = [ 12, 12, prevGame.spriteSize - 24, prevGame.spriteSize - 24 ]
                         break
                     case EntityType.Meteor2:
-                        bbox = [ 22, 22, game.spriteSize - 42, game.spriteSize - 42 ]
+                        bbox = [ 22, 22, prevGame.spriteSize - 42, prevGame.spriteSize - 42 ]
                         break
                     case EntityType.UFO:
-                        bbox = [ 12, 16, game.spriteSize - 20, game.spriteSize - 28 ]
+                        bbox = [ 12, 16, prevGame.spriteSize - 20, prevGame.spriteSize - 28 ]
                         break
                 }
 
@@ -339,54 +350,56 @@ const handleSpawning = (): void => {
                         speed: .5 + (Math.random()),
                         bboxStartXOffset: 16,
                         bboxStartYOffset: 14,
-                        bboxWidth: game.spriteSize - 32,
-                        bboxHeight: game.spriteSize - 28
+                        bboxWidth: prevGame.spriteSize - 32,
+                        bboxHeight: prevGame.spriteSize - 28
                     }
                     starsSpawned++
                 }
             }
 
-            game = {
-                ...game, 
-                entities: [...game.entities, ...newEntities],
+            prevGame = {
+                ...prevGame, 
+                entities: [...prevGame.entities, ...newEntities],
                 spawnTickCount: 0
             }
         }
     }
+
+    return prevGame
 }
 
-const handleCollision = (): void => {
+const handleCollision = (prevGame: GameStatus, prevPlayer: PlayerStatus): FullState => {
     // Initialize player bbox width/height
-    if (player.bboxWidth === 0) {
-        player = {
-            ...player,
+    if (prevPlayer.bboxWidth === 0) {
+        prevPlayer = {
+            ...prevPlayer,
             bboxStartXOffset: 12,
             bboxStartYOffset: 2,
-            bboxWidth: game.spriteSize - 25,
-            bboxHeight: game.spriteSize - 2
+            bboxWidth: prevGame.spriteSize - 25,
+            bboxHeight: prevGame.spriteSize - 2
         }
     }
 
     // Collision detection is wrapped with this condition because
     // we don't need to check it that often
-    if (!game.tickCount && game.tickSkip) {
-        const pStartX = (player.xpos - (game.spriteSize * .5)) 
-            + player.bboxStartXOffset
-        const pTopY = (player.ypos - (game.spriteSize * .5))
-            + player.bboxStartYOffset
+    if (!prevGame.tickCount && prevGame.tickSkip) {
+        const pStartX = (prevPlayer.xpos - (prevGame.spriteSize * .5)) 
+            + prevPlayer.bboxStartXOffset
+        const pTopY = (prevPlayer.ypos - (prevGame.spriteSize * .5))
+            + prevPlayer.bboxStartYOffset
 
         const entityArr: Entity[] = []
         let caughtStar = false
-        game.entities.forEach(entity => {
-            const eStartX = (entity.xpos - (game.spriteSize * .5)) 
+        prevGame.entities.forEach(entity => {
+            const eStartX = (entity.xpos - (prevGame.spriteSize * .5)) 
                 + entity.bboxStartXOffset
-            const eTopY = (entity.ypos - (game.spriteSize * .5))
+            const eTopY = (entity.ypos - (prevGame.spriteSize * .5))
                 + entity.bboxStartYOffset
 
             if (pStartX < eStartX + entity.bboxWidth &&
-                pStartX + player.bboxWidth > eStartX &&
+                pStartX + prevPlayer.bboxWidth > eStartX &&
                 pTopY < eTopY + entity.bboxHeight &&
-                pTopY + player.bboxHeight > eTopY) {
+                pTopY + prevPlayer.bboxHeight > eTopY) {
                     if (entity.type === EntityType.Star) {
                         entityArr.push({
                             ...entity,
@@ -396,11 +409,11 @@ const handleCollision = (): void => {
                         })
                         caughtStar = true
                         // Add point to score
-                        game = {...game, score: game.score + 1}
+                        prevGame = {...prevGame, score: prevGame.score + 1}
                         return
                     } else if (entity.type !== EntityType.StarCaught) {
                         // Game over :(
-                        game = {...game, state: GameState.GameOver}
+                        prevGame = {...prevGame, state: GameState.GameOver}
                         return
                     }
                 }
@@ -409,9 +422,11 @@ const handleCollision = (): void => {
 
         // We only need to update this if a star was caught
         if (caughtStar) {
-            game = {...game, entities: entityArr}
+            prevGame = {...prevGame, entities: entityArr}
         }
     }
+
+    return {game: prevGame, player: prevPlayer}
 }
 
 const gameLoop = (
@@ -422,10 +437,10 @@ const gameLoop = (
         ctx.canvas.style.cursor = 'default'
         game = {...game, state}
     }
-    handleSpawning()
-    handleCollision()
-    updateStatus(ctx)
-    draw(ctx, gameTextElement)
+    game = handleSpawning(game)
+    {({game, player} = handleCollision(game, player))}
+    {({game, player} = updateStatus(ctx, game, player))}
+    {({game, player} = draw(ctx, gameTextElement, game, player))}
 
     if (game.state === GameState.Playing) {
         window.requestAnimationFrame(() => gameLoop(ctx, gameTextElement))
