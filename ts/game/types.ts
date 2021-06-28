@@ -35,6 +35,11 @@ interface PlayerStatus extends Entity {
     state: PlayerState
 }
 
+interface FullState {
+    game: GameStatus
+    player: PlayerStatus
+}
+
 interface CanvasCalcs {
     maxStars: number | null
     entityXpos: number[]
@@ -42,4 +47,4 @@ interface CanvasCalcs {
     foregroundXpos: number[]
 }
 
-export type { GameStatus, PlayerStatus, Entity, CanvasCalcs }
+export type { GameStatus, PlayerStatus, Entity, CanvasCalcs, FullState }

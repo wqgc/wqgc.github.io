@@ -1,47 +1,47 @@
 import { GameStatus, PlayerStatus } from '../types'
 import { PlayerState } from '../enums'
 
-const idle = ( game: GameStatus, player: PlayerStatus): PlayerStatus => {
+const idle = ( prevGame: GameStatus, prevPlayer: PlayerStatus): PlayerStatus => {
     // If one run input is pressed, update state
-    if (!(game.input.left && game.input.right) 
-        && (game.input.left || game.input.right)) {
+    if (!(prevGame.input.left && prevGame.input.right) 
+        && (prevGame.input.left || prevGame.input.right)) {
         return {
-            ...player,
+            ...prevPlayer,
             state: PlayerState.Running
         }
     }
 
-    return player
+    return prevPlayer
 }
 
 const running = (
-    game: GameStatus, 
-    player: PlayerStatus, 
+    prevGame: GameStatus, 
+    prevPlayer: PlayerStatus, 
     startX: number, 
     maxX: number): PlayerStatus => {
-    if (!(game.input.left && game.input.right)) {
-        if ((game.input.left && player.xpos - 5 < startX)
-            || (game.input.right && (player.xpos * 2) + 5 > maxX)) {
-            return player
+    if (!(prevGame.input.left && prevGame.input.right)) {
+        if ((prevGame.input.left && prevPlayer.xpos - 5 < startX)
+            || (prevGame.input.right && (prevPlayer.xpos * 2) + 5 > maxX)) {
+            return prevPlayer
         }
 
-        if (game.input.left) {
+        if (prevGame.input.left) {
             return {
-                    ...player,
+                    ...prevPlayer,
                     state: PlayerState.Running,
-                    xpos: player.xpos - player.speed
+                    xpos: prevPlayer.xpos - prevPlayer.speed
                 }
-        } else if (game.input.right) {
+        } else if (prevGame.input.right) {
             return {
-                    ...player,
+                    ...prevPlayer,
                     state: PlayerState.Running,
-                    xpos: player.xpos + player.speed
+                    xpos: prevPlayer.xpos + prevPlayer.speed
                 }
         }
     }
 
     return {
-        ...player,
+        ...prevPlayer,
         state: PlayerState.Idle
     }
 }
