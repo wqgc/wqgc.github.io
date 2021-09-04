@@ -1,3 +1,15 @@
+/*
+
+Well, I had a contact form here.
+It sends a request to a Vercel "serverless function", which handles
+delivering the e-mail to Gmail. I even made my own little rate-limiter.
+
+But Gmail is somewhat troublesome to deal with, and has stopped accepting e-mails
+from my serverless function. I could fix it, but I'm busy with other priorities at the moment.
+So I've removed the contact form and I encourage people to get in touch through LinkedIn.
+
+*/
+
 // Handle the contact form
 const contact = (): void => {
     const form = document.getElementById('contact-form') as HTMLFormElement
