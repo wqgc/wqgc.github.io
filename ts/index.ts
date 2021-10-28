@@ -1,5 +1,4 @@
 import runGame from './game/main'
-import contact from './contact'
 const Typewriter = require('typewriter-effect/dist/core')
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -39,7 +38,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     
     runGame(document.getElementById('game') as HTMLCanvasElement)
-    contact()
 })
 
 export {}
