@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/wqgc/portfolio#readme",
   "dependencies": {
-    "esbuild": "^0.10.2",
+    "esbuild": "^0.28.2",
     "typewriter-effect": "^2.17.0"
   },
   "devDependencies": {
