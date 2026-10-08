@@ -1,11 +1,29 @@
 html {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520' viewBox='0 0 520 520'%3E%3Cg fill='%23f2d58a'%3E%3Ctext x='80' y='120' font-size='25'%3E✦%3C/text%3E%3Ctext x='360' y='80' font-size='18'%3E‧%3C/text%3E%3Ctext x='250' y='280' font-size='13'%3E˚%3C/text%3E%3Ctext x='450' y='390' font-size='23'%3E˚%3C/text%3E%3Ctext x='90' y='440' font-size='16'%3E:%3C/text%3E%3Ctext x='155' y='55' font-size='12'%3E⊹%3C/text%3E%3Ctext x='290' y='125' font-size='15'%3E₊%3C/text%3E%3Ctext x='440' y='175' font-size='11'%3E✦%3C/text%3E%3Ctext x='45' y='220' font-size='18'%3E⊹%3C/text%3E%3Ctext x='170' y='205' font-size='9'%3E˚%3C/text%3E%3Ctext x='335' y='225' font-size='14'%3E‧%3C/text%3E%3Ctext x='490' y='270' font-size='12'%3E₊%3C/text%3E%3Ctext x='110' y='330' font-size='20'%3E˚%3C/text%3E%3Ctext x='210' y='370' font-size='11'%3E⊹%3C/text%3E%3Ctext x='350' y='340' font-size='17'%3E:%3C/text%3E%3Ctext x='410' y='475' font-size='13'%3E⊹%3C/text%3E%3Ctext x='270' y='470' font-size='19'%3E✦%3C/text%3E%3Ctext x='30' y='500' font-size='10'%3E₊%3C/text%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
   font-family: "Consolas", "Courier New", monospace;
+}
+
+/* Larger, fainter sparkles */
+html::after {
+  content: "";
+  position: fixed;
+  inset: -100px;
+  pointer-events: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520' viewBox='0 0 520 520'%3E%3Cg fill='%23ffffff'%3E%3Ctext x='80' y='120' font-size='25'%3E✦%3C/text%3E%3Ctext x='360' y='80' font-size='18'%3E‧%3C/text%3E%3Ctext x='250' y='280' font-size='13'%3E˚%3C/text%3E%3Ctext x='450' y='390' font-size='23'%3E˚%3C/text%3E%3Ctext x='90' y='440' font-size='16'%3E:%3C/text%3E%3Ctext x='155' y='55' font-size='12'%3E⊹%3C/text%3E%3Ctext x='290' y='125' font-size='15'%3E₊%3C/text%3E%3Ctext x='440' y='175' font-size='11'%3E✦%3C/text%3E%3Ctext x='45' y='220' font-size='18'%3E⊹%3C/text%3E%3Ctext x='170' y='205' font-size='9'%3E˚%3C/text%3E%3Ctext x='335' y='225' font-size='14'%3E‧%3C/text%3E%3Ctext x='490' y='270' font-size='12'%3E₊%3C/text%3E%3Ctext x='110' y='330' font-size='20'%3E˚%3C/text%3E%3Ctext x='210' y='370' font-size='11'%3E⊹%3C/text%3E%3Ctext x='350' y='340' font-size='17'%3E:%3C/text%3E%3Ctext x='410' y='475' font-size='13'%3E⊹%3C/text%3E%3Ctext x='270' y='470' font-size='19'%3E✦%3C/text%3E%3Ctext x='30' y='500' font-size='10'%3E₊%3C/text%3E%3C/g%3E%3C/svg%3E");
+
+  opacity: 0.1;
 }
 
 html,
 body {
   height: 100%;
   margin: auto;
+  background-color: #161922;
+}
+
+main {
   background-color: #161922;
 }
 
