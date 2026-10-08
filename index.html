@@ -1,170 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta name="description" content="Rashelle Hopkins' portfolio site.">
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap&family=VT323&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles.css" type="text/css">
-        <script src="script.js"></script>
-        <title>Portfolio</title>
-    </head>
-    <body>
-        <div id='container'>
-            <div class='nav-spacer'></div>
-            <nav>
-                <ul>
-                    <li><a id='skills-link' href='#skills'>Skills</a></li>
-                    <li><a id='projects-link' href='#projects'>Projects</a></li>
-                    <li><a id='contact-link' href='#contact'>Contact</a></li>
-                </ul>
-            </nav>
-            <header>
-                <h1>Rashelle Hopkins</h1>
-                <h2 class='title'>Web Developer</h2>
-                <h3 class='subtitle'>Creating <span id='cycle'>Interactive Experiences</span></h3>
-            </header>
-            <main>
-                <div id='skills'></div>
-                <section id='skills-container'>
-                    <h2>Skills</h2>
-                    <hr>
-                    <ul>
-                        <li>
-                            <ul>
-                                <li>
-                                    <img src='/svgs/html-5.svg' title='HTML5 Logo' alt='HTML5' height='80'/>
-                                </li>
-                                <li>
-                                    <img src='/svgs/css-3.svg' title='CSS3 Logo' alt='CSS3' height='80'/>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <ul>
-                                <li>
-                                    <img src='/svgs/javascript.svg' title='JavaScript Logo' alt='JavaScript' height='80'/>
-                                </li>
-                                <li>
-                                    <img src='/svgs/typescript-icon.svg' title='TypeScript Logo' alt='TypeScript' height='80'/>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <ul>
-                                <li>
-                                    <img src='/svgs/react.svg' title='React Logo' alt='React' height='80'/>
-                                </li>
-                                <li>
-                                    <img src='/svgs/nodejs-icon.svg' title='Node Logo' alt='Node' height='80'/>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </section>
-                <div id='projects'></div>
-                <section id='projects-container'>
-                    <h2>Projects</h2>
-                    <hr>
-                    <div class='project'>
-                        <div class='box'>
-                            <h3>Organizational App</h3>
-                            <p>
-                                <a href='https://rashellehopkins.com/organize-app/' target='_blank' rel='noreferrer noopener'><strong>Organize</strong></a> is perfect for keeping track of notes, lists, and links with an easy to use interface. 
-                                Create pages, sections, and items that you can edit and reorder freely. No sign-ups; data is stored in your browser and can be imported or exported at any time.
-                            </p>
-                            <p>
-                                This <span class='highlight'>Node</span> web app, a solo-project I made, is built with semantic <span class='highlight'>HTML</span>, 
-                                responsive <span class='highlight'>CSS</span>, and programmed in <span class='highlight'>JavaScript</span> 
-                                using <span class='highlight'>TypeScript</span>, <span class='highlight'>Redux</span>, and the <span class='highlight'>React</span> library.
-                            </p>
-                            <p>
-                                <a href='https://github.com/wqgc/organize-app' target='_blank' rel='noreferrer noopener'>
-                                    See the code on GitHub
-                                </a>
-                            </p>
-                        </div>
-                        <img src='/images/orgwide.png' title='Web App Showcase' alt='Image of website on computer' width='400'/>
-                    </div>
-                    <hr class='divider'>
-                    <div class='project'>
-                        <div class='box'>
-                            <h3>Community Site for Creators</h3>
-                            <p>
-                                I built the frontend of a community website for a client, collaborated with our backend developer and took the lead to 
-                                successfully ensure our goals were met.
-                            </p>
-                            <p>
-                                The technology I worked with was <span class='highlight'>React</span> with <span class='highlight'>Next.js</span>,
-                                <span class='highlight'>JavaScript/TypeScript</span>, and <span class='highlight'>Chakra UI</span>.
-                                I designed the user interface and implemented basic user authentication and authorization. 
-                                I also handled other frontend functionality such as giving users the ability to submit, update, and delete posts, 
-                                and deployed the site to Cloudflare Pages as a <span class='highlight'>Progressive Web App</span>.
-                            </p>
-                        </div>
-                    </div>
-                    <hr class='divider'>
-                    <div class='project project--column'>
-                        <div class='box'>
-                            <h3>Star Catcher</h3>
-                            <p>
-                                <strong>Star Catcher</strong>
-                                is a small arcade-style game I solely built with <span class='highlight'>Node</span>, 
-                                <span class='highlight'>JavaScript/TypeScript</span>. 
-                                It makes use of HTML5's Canvas web API and dynamically scales to the width of the page without 
-                                losing quality.
-                            </p>
-                            <p>
-                                <strong>Keyboard:</strong>
-                                Use the <span class='highlight'>Left</span> and <span class='highlight'>Right</span> arrow keys
-                                or <span class='highlight'>A</span> and <span class='highlight'>D</span> to move.
-                                <br>
-                                <strong>Touchscreen:</strong>
-                                <span class='highlight'>Tap</span> and <span class='highlight'>hold</span> to move.
-                            </p>
-                            <p>
-                                Catch stars to get points, but avoid everything else! Hit <strong>Game Start</strong> to begin.
-                            </p>
-                            <p>
-                                You can find the code in my portfolio
-                                <a href='https://github.com/wqgc/portfolio' target='_blank' rel='noreferrer noopener'>GitHub repo</a>
-                                under the "ts" folder.
-                            </p>
-                        </div>
-                        <div id='game-text'></div>
-                        <canvas id='game' tabindex=0>
-                            There's supposed to be a game here, but you have JavaScript disabled or your browser doesn't support Canvas.
-                        </canvas>
-                    </div>
-                </section>
-                <div id='contact'></div>
-                <section id='contact-container'>
-                    <h2>Contact</h2>
-                    <hr>
-                    <div class='box'>
-                        <strong>
-                            <p class='center-text'>
-                                <span class='nowrap'>
-                                    Send me a message on
-                                    <span class='linkedin-icon'>
-                                        <img src='/svgs/linkedin-icon.svg' title='LinkedIn Logo' alt='LinkedIn' width=20/>
-                                    </span>
-                                    <a href='https://www.linkedin.com/in/rashellehopkins/' target='_blank' rel='noreferrer noopener'>LinkedIn</a>
-                                </span>
-                                <span class='nowrap'>
-                                    and see what I've made on
-                                    <span class='github-icon'>
-                                            <img src='/svgs/github-icon.svg' title='GitHub Logo' alt='GitHub' width=20/>
-                                    </span>
-                                    <a href='https://github.com/wqgc' target='_blank' rel='noreferrer noopener'>GitHub</a>
-                                </span>
-                            </p>
-                        </strong>
-                    </div>
-                </section>
-            </main>
-        </div>
-    </body>
+  <head>
+    <meta name="description" content="Rashelle Hopkins' portfolio site." />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./bamboo.css" type="text/css" />
+    <link rel="stylesheet" href="./styles.css" type="text/css" />
+    <script src="./script.js" defer></script>
+    <script type="module" src="https://ascii.rest/ascii.js"></script>
+    <title>Portfolio</title>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <div>Home</div>
+        <div class="divider">|</div>
+        <div><a href="./fun">Fun</a></div>
+      </nav>
+      <h1>Rashelle Hopkins</h1>
+      <div class="ascii-container">
+        <ascii-art
+          class="ascii"
+          piece="aquarium"
+          options='{"motion": "true"}'
+        ></ascii-art>
+      </div>
+      <h2>Professional Experience</h2>
+      Under construction
+    </main>
+  </body>
 </html>

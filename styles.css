@@ -1,363 +1,61 @@
-html, body {
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
-    background-color: #161922;
-    color: #161922;
+html {
+  font-family: "Consolas", "Courier New", monospace;
 }
 
-#container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-p {
-    line-height: 150%;
-}
-
-a {
-    color: #0056a7;
-}
-
-a:hover {
-    color: #00274b;
-}
-
-ul {
-    padding: 0;
-    list-style-type: none;
-}
-
-li {
-    display: inline;
-    padding: 0;
+html,
+body {
+  height: 100%;
+  margin: auto;
+  background-color: #161922;
 }
 
 nav {
-    position: fixed;
-    width: 100%;
-    background-color: #161922;
-    box-shadow: 0 2px 10px #161922;
-    z-index: 999;
-}
-
-nav ul {
-    max-width: 900px;
-    margin: 16px auto;
-    display: flex;
-    justify-content: flex-end;
-    height: 100%;
-}
-
-nav li a {
-    color: rgb(203, 211, 255);
-    text-decoration: none;
-    padding: 24px;
-}
-
-nav li a:hover {
-    color: rgb(255, 237, 198);
-}
-
-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-image: url('/images/nightsky.jpg');
-    background-repeat: no-repeat;
-    background-position: 50% 92%;
-    color: white;
-    text-align: center;
-    min-height: 300px;
-    font-size: 18px;
-    z-index: 2;
-}
-
-header span {
-    padding: 8px 0;
+  display: flex;
+  flex-direction: row;
+  float: right;
+  gap: 16px;
+  font-weight: bold;
 }
 
 main {
-    max-width: 900px;
-    display: flex;
-    flex-direction: column;
-    margin: 16px auto;
-    padding: 12px 20px;
-    background-color: rgb(203, 211, 255);
-    border-radius: 4px;
-    box-shadow: 0 6px 10px black;
-}
-
-h1 {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 2.5em;
-    margin: 8px;
-}
-
-h2 {
-    margin: 4px 0;
-}
-
-hr {
-    margin-left: 0;
-    max-width: 100px;
-    border: 1px solid rgb(116, 123, 167);
+  padding-bottom: 50px;
 }
 
 .divider {
-    max-width: 100%;
-    border: 1px solid rgb(168, 176, 221);
+  color: #3b4252;
 }
 
-.box {
-    background-color: white;
-    border-radius: 4px;
-    padding: 4px 18px;
-    margin: 16px 0;
-    box-shadow: 0 4px 4px rgb(116, 123, 167);
-}
-
-.title, .subtitle {
-    font-weight: normal;
-    margin: 0;
-    padding: 8px;
-}
-
-.title {
-    font-size: 1.5em;
-    color: rgb(224, 237, 253);
-}
-
-.subtitle {
-    color: rgb(203, 211, 255);
-    font-style: italic;
-    font-size: 1.1em;
-}
-
-.nav-spacer {
-    min-height: 50px;
-}
-
-::selection {
-    background-color: rgb(116, 123, 167);
-    color: white;
-}
-
-#skills-container ul {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-#skills-container img {
-    max-height: 80px;
-    padding: 8px 19px;
-    transition: all .2s ease-in-out;
-}
-
-#skills-container img:hover {
-    transform: scale(1.1);
-}
-
-.project {
-    display: flex;
-}
-
-.project img {
-    width: 400px;
-    align-self: center;
-    margin: 16px 16px 0 16px;
-}
-
-.project--column {
-    flex-direction: column;
-    align-items: center;
-}
-
-@media (max-width: 800px) {
-    main {
-        border-radius: 0;
-    }
-
-    .project {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .project img {
-        width: 100%;
-        max-width: 540px;
-        margin: 0 0 30px 0;
-    }
-}
-
-@media (max-width: 420px) {
-    nav ul {
-        justify-content: space-around;
-    }
-
-    h1 {
-        font-size: 2em;
-    }
-
-    .title {
-        font-size: 1.2em;
-    }
-
-    .subtitle {
-        font-size: 1em;
-    }
+.ascii-container pre {
+  background-color: transparent;
+  text-align: center;
 }
 
 canvas {
-    position: relative;
-    background-color: #161922;
-    color: white;
-    height: 320px;
-    width: 100%;
-    margin: 8px 0 24px 0;
-    border-radius: 4px;
-    text-align: center;
-    cursor: pointer;
-}
-
-#skills, #projects, #contact {
-    position: relative;
-    top: -72px;
+  position: relative;
+  background-color: #161922;
+  color: white;
+  height: 320px;
+  width: 100%;
+  margin: 8px 0 24px 0;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
 }
 
 #game-text {
-    position: relative;
-    top: 140px;
-    height: 0;
-    font-family: 'VT323', monospace;
-    font-size: 48px;
-    color: white;
-    display: inline;
-    pointer-events: none;
-    z-index: 1;
-    transition: transform .2s ease-in-out;
-    text-align: center;
-}
-
-.text-grow {
-    transform: scale(1.1);
-}
-
-.highlight {
-    color: #7c00a1;
-}
-
-textarea {
-    resize: none;
-    height: 100px;
-}
-
-input {
-    height: 32px;
-}
-
-textarea, input {
-    width: 100%;
-    box-sizing: border-box;
-    box-shadow: 0 4px 20px rgb(227, 227, 240) inset;
-    border: 2px solid rgb(194, 206, 219);
-    border-radius: 4px;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1em;
-    margin: 4px 0;
-}
-
-label {
-    font-weight: bold;
-}
-
-label:after {
-    content: '*';
-    color: rgb(204, 7, 7);
-}
-
-.center-text {
-    text-align: center;
-}
-
-#contact-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 4px 12px 4px;
-    padding-top: 0;
-}
-
-#contact-form div {
-    width: 100%;
-    max-width: 420px;
-    padding: 6px 0;
-}
-
-#send {
-    margin: 4px 0;
-    width: 100%;
-    max-width: 420px;
-    font-size: 1.1em;
-    border: 2px solid #161922;
-    background-color: #161922;
-    box-shadow: 0 4px 10px rgb(168, 176, 221);
-    border-radius: 4px;
-    color: white;
-    padding: 12px;
-    cursor: pointer;
-}
-
-#send:hover {
-    color: rgb(255, 237, 198);
-}
-
-#send:disabled {
-    cursor: default;
-}
-
-.success {
-    color: rgb(6, 80, 61);
-}
-
-.error {
-    display: none;
-}
-
-#general-success, #general-error {
-    margin-top: 6px;
-}
-
-.nowrap {
-    white-space: nowrap;
+  position: relative;
+  top: 140px;
+  height: 0;
+  font-family: "VT323", monospace;
+  font-size: 48px;
+  color: white;
+  display: inline;
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.2s ease-in-out;
+  text-align: center;
 }
 
 .js-only {
-    display: none;
-}
-
-.github-icon {
-    position: relative;
-    top: 1px;
-    left: 2px;
-}
-
-.linkedin-icon {
-    position: relative;
-    top: 2px;
-    left: 2px;
-}
-
-.hp {
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 0;
-    width: 0;
-    z-index: -1;
+  display: none;
 }
