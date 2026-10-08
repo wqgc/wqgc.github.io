@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="description" content="Rashelle Hopkins' portfolio site." />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./bamboo.css" type="text/css" />
+    <link rel="stylesheet" href="./styles.css" type="text/css" />
+    <script src="./script.js" defer></script>
+    <script type="module" src="https://ascii.rest/ascii.js"></script>
+    <title>Portfolio</title>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <div><a href="./index">Home</a></div>
+        <div class="divider">|</div>
+        <div>Fun</div>
+        <div class="divider">|</div>
+        <div>
+          <a
+            href="https://linkedin.com/in/rashellehopkins"
+            target="_blank"
+            rel="noopener noreferrer"
+            >LinkedIn ↗</a
+          >
+        </div>
+      </nav>
+      <h1>Rashelle Hopkins</h1>
+      <div class="ascii-container">
+        <ascii-art
+          class="ascii"
+          piece="cat"
+          options='{"motion": "true"}'
+        ></ascii-art>
+      </div>
+      <h2>Hobbies</h2>
+      <ul>
+        <li><strong>Game Development:</strong> Godot, GDScript, C#</li>
+        <li><strong>Writing:</strong> Novels, Short Fiction</li>
+        <li><strong>Art:</strong> Digital Painting, Pixel, Sketches</li>
+      </ul>
+      <h2>Personal Creations</h2>
+      <h3>
+        <a
+          href="https://rashellehopkins.com/organize-app"
+          target="_blank"
+          rel="noopener noreferrer"
+          >(2021) Organize ↗</a
+        >
+      </h3>
+      <ul>
+        <li>
+          A simple note organizing app made with TypeScript, React, and Redux
+        </li>
+      </ul>
+      <h3>(2021) Star Catcher</h3>
+      <ul>
+        <li>
+          Catch stars and avoid everything else in this infinitely generated
+          game!
+        </li>
+        <li><strong>Keyboard:</strong> Left and Right arrow keys or A and D</li>
+        <li><strong>Touchscreen:</strong> Tap and hold</li>
+        <li>
+          <a
+            href="https://github.com/wqgc/wqgc.github.io/blob/master/ts/game/main.ts"
+            target="_blank"
+            rel="noopener noreferrer"
+            >See code on Github ↗</a
+          >
+        </li>
+      </ul>
+      <hr />
+      <div class="game-shell">
+        <div id="game-text"></div>
+        <canvas id="game" tabindex="0">
+          There's supposed to be a game here, but you have JavaScript disabled
+          or your browser doesn't support Canvas.
+        </canvas>
+      </div>
+      <hr />
+    </main>
+    <footer>
+      <a href="https://ascii.rest" target="_blank" rel="noopener noreferrer"
+        >ASCII animations ↗</a
+      >
+    </footer>
+  </body>
+</html>

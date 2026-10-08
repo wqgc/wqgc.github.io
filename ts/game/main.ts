@@ -200,7 +200,7 @@ const draw = (
 
     // Draw score
     ctx.fillStyle = 'white'
-    ctx.font = '24px VT323'
+    ctx.font = '24px Courier New'
     ctx.fillText(
         `SCORE: ${prevGame.score}`, 
         startX + 12, 
@@ -212,10 +212,8 @@ const draw = (
         ctx.fillStyle = '#161922'
         ctx.fillRect(startX, topY, maxX, maxY)
         if (prevGame.state === GameState.Paused) {
-            gameTextElement.style.top = '140px'
             gameTextElement.innerText = 'Paused'
         } else if (prevGame.state === GameState.GameOver) {
-            gameTextElement.style.top = '120px'
             gameTextElement.innerHTML = `Game Over <br> SCORE: ${prevGame.score}`
 
             // Reset game/player data
@@ -542,8 +540,9 @@ const runGame = (canvas: HTMLCanvasElement | null): void | null => {
 
         let resizeTimer: NodeJS.Timeout | null = null
         const resizeCanvas = (): void => {
-            let width = document.getElementById('projects')?.clientWidth
+            const width = canvas.clientWidth || canvas.parentElement?.clientWidth || 0
             if (width) {
+                ctx.setTransform(1, 0, 0, 1, 0, 0)
                 ctx.canvas.height = 320
                 ctx.canvas.width = width
                 ctx.translate(Math.floor(width * .5), Math.floor(ctx.canvas.height * .5))
